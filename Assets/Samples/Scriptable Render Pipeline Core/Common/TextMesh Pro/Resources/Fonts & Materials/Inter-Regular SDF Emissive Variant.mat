@@ -21,8 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Inter-Regular SDF Emissive Variant
-  m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
-  m_Parent: {fileID: 1583706583992693378, guid: 3d5db73b273dc5c4082b1b21c03d8263, type: 2}
+  m_Shader: {fileID: -6465566751694194690, guid: f8605069e61e60e4685c8e97ead17a56, type: 3}
+  m_Parent: {fileID: -6055507529455485361, guid: a98040b3d15e84bcd8031badce61149d, type: 2}
   m_ModifiedSerializedProperties: 2
   m_ValidKeywords: []
   m_InvalidKeywords:

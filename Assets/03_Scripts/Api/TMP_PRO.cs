@@ -14,7 +14,11 @@ public class TMP_PRO : MonoBehaviour
     // public TMP_Text emotionText;
 
     [Header("Emotion→Color 매핑 컴포넌트")] public EmotionColorMapper colorMapper;
-
+    
+    public float revealDelay = 0.5f;
+    
+    private Coroutine revealCoroutine;
+    
     public List<string>  keywordSamples = new List<string>() { "루나 너무 멋져!!" };
     public List<string> emotionSamples = new List<string>() { "행복" };
 
@@ -32,10 +36,46 @@ public class TMP_PRO : MonoBehaviour
         }
 
         // 이벤트 구독
-        AIResponseStore.Instance.OnDataUpdated += UpdateText;
+        AIResponseStore.Instance.OnDataUpdated += StartReveal;
 
         // 기존 데이터로 한 번 즉시 갱신
-        UpdateText();
+        StartReveal();
+    }
+    
+    // 기존 UpdateText 대신 "순차 표시 시작"
+    public void StartReveal()
+    {
+        if (revealCoroutine != null)
+            StopCoroutine(revealCoroutine);
+
+        revealCoroutine = StartCoroutine(ShowKeywords());
+    }
+    
+    private IEnumerator ShowKeywords()
+    {
+        var keywords = AIResponseStore.Instance.LatestKeywords;
+        var emotions = AIResponseStore.Instance.LatestEmotions;
+
+        // 우선 다 비워두고 시작
+        foreach (var txt in keywordTexts)
+            txt.text = "";
+
+        int count = Mathf.Min(keywordTexts.Count, keywords.Count);
+
+        for (int i = 0; i < count; i++)
+        {
+            var txt = keywordTexts[i];
+            var col = colorMapper.GetColor(emotions[i]);
+            txt.color = col;
+            txt.text = keywords[i];
+
+            var vfx = txt.GetComponent<TextEffect>();
+            if (vfx) vfx.Refresh();
+
+            Debug.Log($"{i} : {txt.text}, {txt.color}");
+
+            yield return new WaitForSeconds(revealDelay);
+        }
     }
 
     public void UpdateText()
@@ -102,7 +142,7 @@ public class TMP_PRO : MonoBehaviour
     {
         if (AIResponseStore.Instance != null)
         {
-            AIResponseStore.Instance.OnDataUpdated -= UpdateText;
+            AIResponseStore.Instance.OnDataUpdated -= StartReveal;
         }
     }
 }
