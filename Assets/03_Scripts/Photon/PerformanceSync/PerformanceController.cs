@@ -213,8 +213,11 @@ public class PerformanceController : NetworkBehaviour
         if (!isSpawnReady) return;
         Debug.Log("[All] AI 텍스트 표시 트리거 수신");
         
-        if (tmpPro)
-            tmpPro.UpdateText();
+        //if (tmpPro)
+            //tmpPro.UpdateText();
+
+        if(tmpPro)
+            tmpPro.StartReveal();
         else
             Debug.LogWarning("TMP_PRO를 찾을 수 없습니다.");
     }

@@ -401,7 +401,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 25
+  m_FocalLength: 50
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -416,7 +416,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 40.949253
+  field of view: 21.149632
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -442,8 +442,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42069560}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6211477, y: 0, z: 0, w: 0.78369355}
-  m_LocalPosition: {x: -1.21, y: 55.84, z: -18}
+  m_LocalRotation: {x: 0.05333505, y: 0.26824602, z: -0.014873949, w: 0.9617579}
+  m_LocalPosition: {x: -1.6, y: 8.8, z: -8.784961}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13841,10 +13841,49 @@ MonoBehaviour:
   - {fileID: 1263799673}
   - {fileID: 1383125062}
   colorMapper: {fileID: 1700410940}
+  revealDelay: 0.5
   keywordSamples:
   - "\uB8E8\uB098 \uB108\uBB34 \uBA4B\uC838!!"
+  - "\uB8E8\uB098\uC57C \uC0AC\uB791\uD574"
+  - "\uC624\uB298 \uC644\uC804 \uC740\uBC1C \uACF5\uC8FC\uC796\uC544!"
+  - "\uC0AC\uB791\uD574"
+  - "\uC6B0\uC8FC\uC5D0 \uC628\uAC83 \uAC19\uC544!"
+  - "\uC774 \uC21C\uAC04 \uC11C\uBC84\uC5D0 \uAE30\uB85D \uC644\uB8CC"
+  - "\uC0AC\uB791 \uD574\uD0B9\uB2F9\uD588\uC5B4"
+  - "\uB108\uB9CC\uC758 \uCEE4\uB110\uB85C \uC9C4\uC785"
+  - "\uC624\uB298 \uB124\uC628\uCC98\uB7FC \uBE5B\uB0AC\uC5B4"
+  - "\uB108\uB85C \uC778\uD574 \uC138\uC0C1\uC774 \uD658\uD574\uC84C\uC5B4"
+  - "\uB8E8\uB098 \uCD5C\uACE0"
+  - "\uB0B4 \uC2EC\uC7A5\uC774 \uBD88\uD0C0\uC62C\uB77C"
+  - "\uC0AC\uB791 \uC54C\uACE0\uB9AC\uC998 \uC778\uC81D\uC158"
+  - "\uB8E8\uB098 \uB108\uBB34 \uC608\uBED0"
+  - "\uC758\uC0C1\uC774 \uB108\uBB34 \uBA4B\uC838"
+  - "\uC644\uC804 \uC2DC\uD06C\uD574"
+  - "\uC624\uB298 \uBB34\uB300 \uD654\uC774\uD305"
+  - "\uC624\uB298 \uBD80\uD130 \uB8E8\uB098 1\uD638\uD32C\uC774\uC57C"
+  - "\uCD5C\uACE0"
+  - "\uC0AC\uB791"
   emotionSamples:
   - "\uCDA9\uBD84\uD568"
+  - "\uC0AC\uB791"
+  - "\uAC10\uC0AC"
+  - "\uD589\uBCF5"
+  - "\uAC10\uB3D9"
+  - "\uD658\uD76C"
+  - "\uD76C\uC5F4"
+  - "\uC990\uAC70\uC6C0"
+  - "\uD765\uBD84"
+  - "\uC790\uBD80\uC2EC"
+  - "\uB9CC\uC871"
+  - "\uAE30\uB300\uAC10"
+  - "\uACBD\uC678\uAC10"
+  - "\uC5F4\uC815"
+  - "\uD589"
+  - "\uC0AC\uB791"
+  - "\uC0AC\uB791"
+  - "\uC5F4\uC815"
+  - "\uBAB0\uC785"
+  - "\uAE30\uB300\uAC10"
 --- !u!4 &1675721123
 Transform:
   m_ObjectHideFlags: 0

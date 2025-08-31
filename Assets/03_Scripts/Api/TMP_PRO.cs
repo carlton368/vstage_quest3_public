@@ -77,66 +77,102 @@ public class TMP_PRO : MonoBehaviour
             yield return new WaitForSeconds(revealDelay);
         }
     }
-
-    public void UpdateText()
+    
+    [ContextMenu("Test Sequential Reveal")]
+    public void TestSequentialReveal()
     {
-        var keywords = AIResponseStore.Instance.LatestKeywords;
-        var emotions = AIResponseStore.Instance.LatestEmotions;
-
-        Debug.Log("TMP_PRO UpdateText 호출됨");
-        Debug.Log("키워드: " + string.Join(", ", keywords));
-        Debug.Log("감정: " + string.Join(", ", emotions));
-        // 1) 각 키워드 텍스트에 인덱스별 색상과 키워드 할당
-        var count = Mathf.Min(keywordTexts.Count, keywords.Count);
-        for (var i = 0; i < count; i++)
-        {
-            var txt = keywordTexts[i];
-            var col = colorMapper.GetColor(emotions[i]);
-            txt.color = col;
-            txt.text  = keywords[i];
-
-            var vfx = txt.GetComponent<TextEffect>();
-            vfx.Refresh();
-            
-            Debug.Log($"{i} : {txt.text}, {txt.color}");
-        }
-        // 남은 텍스트는 빈 문자열 처리
-        for (var i = count; i < keywordTexts.Count; i++)
-        {
-            keywordTexts[i].text = "";
-        }
+        if (revealCoroutine != null)
+            StopCoroutine(revealCoroutine);
+        revealCoroutine = StartCoroutine(TestShowKeywords());
     }
     
-    
-    [ContextMenu("Test")]
-    public void UpdateTextTest()
+    private IEnumerator TestShowKeywords()
     {
+        // 기존 keywords 대신 샘플 사용
         var keywords = keywordSamples;
         var emotions = emotionSamples;
 
-        Debug.Log("TMP_PRO UpdateText 호출됨");
-        Debug.Log("키워드: " + string.Join(", ", keywords));
-        Debug.Log("감정: " + string.Join(", ", emotions));
-        // 1) 각 키워드 텍스트에 인덱스별 색상과 키워드 할당
-        var count = Mathf.Min(keywordTexts.Count, keywords.Count);
-        for (var i = 0; i < count; i++)
+        // 초기화
+        foreach (var txt in keywordTexts)
+            txt.text = "";
+
+        int count = Mathf.Min(keywordTexts.Count, keywords.Count);
+
+        for (int i = 0; i < count; i++)
         {
             var txt = keywordTexts[i];
             var col = colorMapper.GetColor(emotions[i]);
             txt.color = col;
-            txt.text  = keywords[i];
+            txt.text = keywords[i];
 
             var vfx = txt.GetComponent<TextEffect>();
-            vfx.Refresh();
+            if (vfx) vfx.Refresh();
 
-            Debug.Log($"{i} : {txt.text}, {txt.color}");
-        }
-        // 남은 텍스트는 빈 문자열 처리
-        for (var i = count; i < keywordTexts.Count; i++)
-        {
-            keywordTexts[i].text = "";
+            Debug.Log($"[Test] {i} : {txt.text}, {txt.color}");
+
+            yield return new WaitForSeconds(revealDelay);
         }
     }
+
+    // public void UpdateText()
+    // {
+    //     var keywords = AIResponseStore.Instance.LatestKeywords;
+    //     var emotions = AIResponseStore.Instance.LatestEmotions;
+    //
+    //     Debug.Log("TMP_PRO UpdateText 호출됨");
+    //     Debug.Log("키워드: " + string.Join(", ", keywords));
+    //     Debug.Log("감정: " + string.Join(", ", emotions));
+    //     // 1) 각 키워드 텍스트에 인덱스별 색상과 키워드 할당
+    //     var count = Mathf.Min(keywordTexts.Count, keywords.Count);
+    //     for (var i = 0; i < count; i++)
+    //     {
+    //         var txt = keywordTexts[i];
+    //         var col = colorMapper.GetColor(emotions[i]);
+    //         txt.color = col;
+    //         txt.text  = keywords[i];
+    //
+    //         var vfx = txt.GetComponent<TextEffect>();
+    //         vfx.Refresh();
+    //         
+    //         Debug.Log($"{i} : {txt.text}, {txt.color}");
+    //     }
+    //     // 남은 텍스트는 빈 문자열 처리
+    //     for (var i = count; i < keywordTexts.Count; i++)
+    //     {
+    //         keywordTexts[i].text = "";
+    //     }
+    // }
+    //
+    //
+    // [ContextMenu("Test")]
+    // public void UpdateTextTest()
+    // {
+    //     var keywords = keywordSamples;
+    //     var emotions = emotionSamples;
+    //
+    //     Debug.Log("TMP_PRO UpdateText 호출됨");
+    //     Debug.Log("키워드: " + string.Join(", ", keywords));
+    //     Debug.Log("감정: " + string.Join(", ", emotions));
+    //     // 1) 각 키워드 텍스트에 인덱스별 색상과 키워드 할당
+    //     var count = Mathf.Min(keywordTexts.Count, keywords.Count);
+    //     for (var i = 0; i < count; i++)
+    //     {
+    //         var txt = keywordTexts[i];
+    //         var col = colorMapper.GetColor(emotions[i]);
+    //         txt.color = col;
+    //         txt.text  = keywords[i];
+    //
+    //         var vfx = txt.GetComponent<TextEffect>();
+    //         vfx.Refresh();
+    //
+    //         Debug.Log($"{i} : {txt.text}, {txt.color}");
+    //     }
+    //     // 남은 텍스트는 빈 문자열 처리
+    //     for (var i = count; i < keywordTexts.Count; i++)
+    //     {
+    //         keywordTexts[i].text = "";
+    //     }
+    // }
 
     private void OnDestroy()
     {
