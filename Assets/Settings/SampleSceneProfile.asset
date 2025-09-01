@@ -65,7 +65,7 @@ MonoBehaviour:
     m_Value: -0.5
   contrast:
     m_OverrideState: 1
-    m_Value: -0.7
+    m_Value: 0
   colorFilter:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -230,10 +230,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   lift:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: -7.996956e-10}
   gamma:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0.07615792}
   gain:
     m_OverrideState: 1

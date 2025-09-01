@@ -9,7 +9,7 @@
                     "name": "Poke",
                     "type": "Button",
                     "id": "40eda730-1343-4304-a541-d7c035370ce5",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -18,7 +18,7 @@
                     "name": "Pinch",
                     "type": "Button",
                     "id": "34056e04-d03d-4802-982b-a9972fd692ff",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -27,7 +27,7 @@
                     "name": "Grab",
                     "type": "Button",
                     "id": "07d064b1-f208-4c9f-bd5a-2620a10e7bab",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -36,7 +36,7 @@
                     "name": "Thumb",
                     "type": "Button",
                     "id": "cc02894b-62a0-483f-8d1b-87b399099928",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -45,7 +45,7 @@
                     "name": "Open",
                     "type": "Button",
                     "id": "0221ceea-2049-4516-a5e4-23aab7d2185e",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
