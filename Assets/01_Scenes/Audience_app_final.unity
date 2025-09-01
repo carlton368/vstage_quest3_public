@@ -6262,7 +6262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 820085364426939818, guid: ba48c53952a0c41b2b6cbbae9375f4c5, type: 3}
       propertyPath: m_text
-      value: 
+      value: <+char duration=1.2 probability=0.5></+char>
       objectReference: {fileID: 0}
     - target: {fileID: 2239282816368638093, guid: ba48c53952a0c41b2b6cbbae9375f4c5, type: 3}
       propertyPath: m_LocalScale.x
@@ -9396,7 +9396,7 @@ MonoBehaviour:
   sceneHideAnimations:
     _serializedList: []
   preview: 0
-  useDefaultDatabase: 1
+  useDefaultDatabase: 0
   useDefaultKeywordDatabase: 0
   initDatabase: 1
   previewUpdatesPerSecond: 60
@@ -15062,7 +15062,7 @@ MonoBehaviour:
   sceneHideAnimations:
     _serializedList: []
   preview: 0
-  useDefaultDatabase: 1
+  useDefaultDatabase: 0
   useDefaultKeywordDatabase: 0
   initDatabase: 1
   previewUpdatesPerSecond: 60
