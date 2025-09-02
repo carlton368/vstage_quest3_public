@@ -1,85 +1,71 @@
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [System.Serializable]
-public class AudienceSpawnPoint {
-    public Transform playerAnchor;   // XR Origin 둘 자리
-    public Transform guideAnchor;    // User Guide Canvas 자리(없으면 null)
+public class AudienceRigSet {
+    public GameObject xrOrigin;     // XR Origin 루트(카메라 포함)
+    public GameObject guideCanvas;  // Concert User Guide Canvas
 }
 
 public class AudienceSpawnManager : MonoBehaviour
 {
-    [Header("Two spawn points")]
-    public AudienceSpawnPoint pointA;
-    public AudienceSpawnPoint pointB;
+    [Header("미리 배치해 둔 2세트(또는 N세트)")]
+    public AudienceRigSet[] sets;
 
-    [Header("Refs")]
-    public Transform xrOrigin;           // XR Origin 루트
-    public Transform userGuideCanvas;    // World Space Canvas
-    public Transform faceTarget;         // 무대 중앙 등, 바라볼 목표(선택)
+    [Header("옵션")]
+    public bool deactivateOthers = true;  // 선택된 것 외 나머지 전부 꺼두기
+    public bool setCanvasCameraIfNeeded = true; // Canvas가 Screen Space - Camera일 때 카메라 연결
 
-    [Header("Guide fallback offset (if no guideAnchor)")]
-    public float guideForward = 1.2f;
-    public float guideUp = 0.2f;
+    int _currentIndex = -1;
 
-    [ContextMenu("Place Audience Random")]
-    public void PlaceAudienceRandom()
+    void Awake()
     {
-        var chosen = (Random.value < 0.5f) ? pointA : pointB;
-
-        // XR Origin 배치
-        xrOrigin.SetPositionAndRotation(chosen.playerAnchor.position, chosen.playerAnchor.rotation);
-
-        // (선택) XR Origin이 무대를 보게 정렬하고 싶다면
-        if (faceTarget != null)
+        // 시작 시 전부 꺼두기(씬에서 꺼놨다면 생략 가능)
+        foreach (var s in sets)
         {
-            var dir = (faceTarget.position - xrOrigin.position);
-            dir.y = 0f; // 수평만
-            if (dir.sqrMagnitude > 0.0001f)
-                xrOrigin.rotation = Quaternion.LookRotation(dir.normalized, Vector3.up);
-        }
-
-        // 가이드 캔버스 배치
-        if (userGuideCanvas != null)
-        {
-            if (chosen.guideAnchor != null)
-            {
-                userGuideCanvas.SetPositionAndRotation(
-                    chosen.guideAnchor.position, chosen.guideAnchor.rotation);
-            }
-            else
-            {
-                // 앵커 없으면 XR Origin 앞/위에 간단히
-                var forward = xrOrigin.forward;
-                var pos = xrOrigin.position + forward * guideForward + Vector3.up * guideUp;
-                userGuideCanvas.position = pos;
-                userGuideCanvas.rotation = Quaternion.LookRotation(forward, Vector3.up);
-            }
+            if (s.xrOrigin)   s.xrOrigin.SetActive(false);
+            if (s.guideCanvas)s.guideCanvas.SetActive(false);
         }
     }
 
-    void Start()
+    [ContextMenu("Activate Random Set")]
+    public void ActivateRandom()
     {
-        // 앱 시작/입장 시 한 번 호출
-        PlaceAudienceRandom();
+        if (sets == null || sets.Length == 0) return;
+        int idx = Random.Range(0, sets.Length);
+        Activate(idx);
     }
 
-    // 씬에서 포인트를 보기 쉽게 기즈모 표시
-    void OnDrawGizmosSelected()
+    public void Activate(int index)
     {
-        Draw(pointA, Color.cyan);
-        Draw(pointB, Color.magenta);
+        index = Mathf.Clamp(index, 0, sets.Length - 1);
 
-        void Draw(AudienceSpawnPoint p, Color c)
+        if (deactivateOthers)
         {
-            if (p == null || p.playerAnchor == null) return;
-            Gizmos.color = c;
-            Gizmos.DrawWireSphere(p.playerAnchor.position, 0.2f);
-            Gizmos.DrawRay(p.playerAnchor.position, p.playerAnchor.forward * 0.6f);
-            if (p.guideAnchor != null)
+            for (int i = 0; i < sets.Length; i++)
             {
-                Gizmos.color = new Color(c.r, c.g, c.b, 0.6f);
-                Gizmos.DrawCube(p.guideAnchor.position, Vector3.one * 0.12f);
+                if (i == index) continue;
+                if (sets[i].xrOrigin)    sets[i].xrOrigin.SetActive(false);
+                if (sets[i].guideCanvas) sets[i].guideCanvas.SetActive(false);
             }
         }
+
+        // 순서: XR Origin → Canvas (카메라 레퍼런스 문제 방지)
+        if (sets[index].xrOrigin)    sets[index].xrOrigin.SetActive(true);
+        if (sets[index].guideCanvas) sets[index].guideCanvas.SetActive(true);
+
+        // Canvas가 Screen Space - Camera 방식이면, 활성 XR Origin의 Camera를 연결
+        if (setCanvasCameraIfNeeded && sets[index].guideCanvas)
+        {
+            var canvas = sets[index].guideCanvas.GetComponent<Canvas>();
+            if (canvas && canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
+                var cam = sets[index].xrOrigin.GetComponentInChildren<Camera>(true);
+                canvas.worldCamera = cam;
+            }
+        }
+
+        _currentIndex = index;
     }
+
 }
