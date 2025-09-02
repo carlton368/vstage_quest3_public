@@ -37,6 +37,9 @@ namespace MicRecordFunction
         [Header("녹음 중 UI")]
         public GameObject recordingUI;
         private Coroutine blinkCoroutine;
+        
+        //녹음 종료 이벤트
+        public static event Action onRecordingFinished;
 
         [Header("녹음 끝났을 때 날아갈 이펙트")] 
         public GameObject recordEndEffect;
@@ -111,6 +114,9 @@ namespace MicRecordFunction
             transform.localRotation = Quaternion.identity;
 
             Debug.Log("[MicComponent] 주먹 제스처 풀림 -> 녹음 종료 + 왼손으로 복귀");
+            
+            //전역 신호 발사 (스포너가 이걸 들고 이펙트 생성)
+            onRecordingFinished?.Invoke();
         }
         
         private IEnumerator BlinkUI()
