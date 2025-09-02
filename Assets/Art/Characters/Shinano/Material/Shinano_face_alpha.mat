@@ -44,6 +44,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emission2ndBlendMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission2ndMap:
+        m_Texture: {fileID: 2800000, guid: 652134c0d3acb2c4dbdc0b6c2418e4b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Main2ndBlendMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -87,6 +95,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaMaskValue: -0.01
+    - _AlphaToMask: 1
     - _BackfaceForceShadow: 0
     - _BacklightBlur: 0.05
     - _BacklightBorder: 0.35
@@ -94,23 +103,31 @@ Material:
     - _BacklightMainStrength: 0
     - _BacklightNormalStrength: 1
     - _BumpScale: 1
-    - _Cutoff: 0.001
+    - _Cutoff: 0.5
+    - _DstBlend: 0
+    - _Emission2ndBlend: 1
+    - _Emission2ndBlendMode: 1
+    - _Emission2ndFluorescence: 0
+    - _Emission2ndMainStrength: 0.6
+    - _Emission2ndUseGrad: 0
     - _EmissionMainStrength: 1
     - _FlipNormal: 0
     - _GlitterVRParallaxStrength: 1
     - _MatCapBackfaceMask: 0
     - _MatCapNormalStrength: 1
     - _MatCapShadowMask: 0
-    - _OutlineDstBlend: 10
-    - _OutlineSrcBlend: 5
+    - _OutlineAlphaToMask: 1
+    - _OutlineDstBlend: 0
+    - _OutlineSrcBlend: 1
     - _OutlineWidth: 0.06
     - _Reflectance: 0.04
     - _RimBackfaceMask: 0
     - _RimBlur: 0.1
     - _RimBorder: 0.5
     - _RimFresnelPower: 3
+    - _RimMainStrength: 1
     - _RimNormalStrength: 1
-    - _RimShadowMask: 0
+    - _RimShadowMask: 1
     - _Shadow2ndBlur: 0.3
     - _ShadowBlur: 0.1
     - _ShadowNormalStrength: 1
@@ -119,12 +136,19 @@ Material:
     - _SpecularToon: 1
     - _UseBacklight: 0
     - _UseBumpMap: 0
+    - _UseEmission: 0
+    - _UseEmission2nd: 1
+    - _UseMain2ndTex: 0
     - _UseMatCap: 0
     - _UseRim: 0
+    - _UseRimShade: 0
+    - _UseShadow: 1
     m_Colors:
     - _BacklightColor: {r: 0.85, g: 0.8, b: 0.7, a: 1}
     - _Color2nd: {r: 1, g: 1, b: 1, a: 1}
     - _Color3rd: {r: 1, g: 1, b: 1, a: 1}
+    - _Emission2ndBlink: {r: 0, g: 0, b: 3.1415932, a: 0}
+    - _Emission2ndColor: {r: 0.2627451, g: 0.2627451, b: 0.2627451, a: 1}
     - _EmissionColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 0.75}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0.6792453, g: 0.41331434, b: 0.44957763, a: 1}
