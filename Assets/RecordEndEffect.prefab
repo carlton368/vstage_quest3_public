@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1068309643573716145}
   - component: {fileID: 9024049334220758055}
   - component: {fileID: 5493606655353238399}
+  - component: {fileID: 7218244712716861934}
   m_Layer: 0
-  m_Name: fire2
+  m_Name: RecordEndEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4833,3 +4834,28 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7218244712716861934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6302981801273187595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b255e17f8f08546b20d6bb3ad391ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageImpactPoint: {fileID: 0}
+  impactRandomRadius: 0.5
+  maxSpeed: 2.2
+  arriveRadius: 2.5
+  stopDistance: 0.12
+  wanderStrength: 0.45
+  wanderFreq: 0.55
+  hoverAmp: 0.25
+  hoverFreq: 1.2
+  turnSpeed: 4
+  OnArrived:
+    m_PersistentCalls:
+      m_Calls: []
