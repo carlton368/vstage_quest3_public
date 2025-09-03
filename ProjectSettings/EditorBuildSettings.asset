@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/Audience_app_final.unity
     guid: f209f800a2d7043bea9ee23bb534534e
+  - enabled: 1
+    path: Assets/01_Scenes/RecordEffectToFlower.unity
+    guid: a0cbe03fa897376419ca443b584a0ee8
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 0d4fea1ab8e484de4907eb95d0866387, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 4a1a6e5a284c24d65b60d8aa335f1385, type: 2}

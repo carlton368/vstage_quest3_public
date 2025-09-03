@@ -18,16 +18,6 @@ public class AudienceSpawnManager : MonoBehaviour
 
     int _currentIndex = -1;
 
-    void Awake()
-    {
-        // 시작 시 전부 꺼두기(씬에서 꺼놨다면 생략 가능)
-        foreach (var s in sets)
-        {
-            if (s.xrOrigin)   s.xrOrigin.SetActive(false);
-            if (s.guideCanvas)s.guideCanvas.SetActive(false);
-        }
-    }
-
     [ContextMenu("Activate Random Set")]
     public void ActivateRandom()
     {
