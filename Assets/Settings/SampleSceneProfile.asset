@@ -256,8 +256,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   reflectionsMultiplier:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   showInSceneView:
     m_OverrideState: 0
     m_Value: 1
@@ -265,26 +265,26 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   sampleCount:
-    m_OverrideState: 0
-    m_Value: 16
+    m_OverrideState: 1
+    m_Value: 46
   maxRayLength:
-    m_OverrideState: 0
-    m_Value: 24
+    m_OverrideState: 1
+    m_Value: 12
   thickness:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.3
   binarySearchIterations:
-    m_OverrideState: 0
-    m_Value: 6
+    m_OverrideState: 1
+    m_Value: 5
   refineThickness:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   thicknessFine:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.05
   jitter:
-    m_OverrideState: 0
-    m_Value: 0.3
+    m_OverrideState: 1
+    m_Value: 0.072
   animatedJitter:
     m_OverrideState: 0
     m_Value: 0
@@ -292,7 +292,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   thicknessMinimum:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.16
   computeBackFacesLayerMask:
     m_OverrideState: 0
@@ -300,14 +300,14 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
   downsampling:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2
   depthBias:
     m_OverrideState: 0
     m_Value: 0.03
   temporalFilter:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   temporalFilterResponseSpeed:
     m_OverrideState: 0
     m_Value: 1
@@ -318,8 +318,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   reflectionsMaxIntensity:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0.9
   reflectionsIntensityCurve:
     m_OverrideState: 0
     m_Value:
@@ -382,11 +382,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   fresnel:
-    m_OverrideState: 0
-    m_Value: 0.75
+    m_OverrideState: 1
+    m_Value: 0.484
   decay:
-    m_OverrideState: 0
-    m_Value: 2
+    m_OverrideState: 1
+    m_Value: 4
   metallicBoost:
     m_OverrideState: 0
     m_Value: 0
@@ -395,7 +395,7 @@ MonoBehaviour:
     m_Value: 0
   specularControl:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
   specularSoftenPower:
     m_OverrideState: 0
     m_Value: 15
@@ -412,8 +412,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 3
   skyboxContributionPass:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 0
   skyboxCustomCubemap:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -474,7 +474,7 @@ MonoBehaviour:
     m_Value: 0
   stencilCheck:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 1
   stencilValue:
     m_OverrideState: 0
     m_Value: 1
