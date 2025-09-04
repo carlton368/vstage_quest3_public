@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2212686841695822258}
   - component: {fileID: 436082791613388972}
   m_Layer: 0
-  m_Name: RecordEndEffect
+  m_Name: RecordEndEffectPre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
