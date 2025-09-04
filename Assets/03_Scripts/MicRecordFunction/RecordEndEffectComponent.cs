@@ -24,6 +24,8 @@ public class RecordEndEffectComponent : MonoBehaviour
 
     [Header("Rotate")]
     [SerializeField] private float turnSpeed = 4f;
+    
+    [SerializeField] private float fadeOutGrace = 0.1f; // 추가로 더 기다리고 싶으면
 
     [Header("도착 시 이벤트(꽃 피우기/게이지 등)")]
     public UnityEvent OnArrived;
@@ -33,10 +35,17 @@ public class RecordEndEffectComponent : MonoBehaviour
     Vector3 _targetPos;
     float _seed;
     bool _moving;
+    private bool _isFading;
 
     public void SetStageImpactPoint(Transform t) => stageImpactPoint = t; // 필요시 외부에서 세팅
 
-    void Awake() => _seed = Random.value * 1000f;
+    // 캐시
+    private ParticleSystem[] _particleSystems;
+    
+    void Awake() {
+        _seed = Random.value * 1000f;
+        _particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+    }
 
     void OnEnable()
     {
@@ -90,11 +99,35 @@ public class RecordEndEffectComponent : MonoBehaviour
         }
 
         // 도착 처리
-        if (dist <= stopDistance && _vel.magnitude < 0.05f)
+        if (dist <= stopDistance && _vel.magnitude < 0.05f && !_isFading)
         {
             _moving = false;
-            OnArrived?.Invoke();  // 꽃/게이지 트리거
-            gameObject.SetActive(false); // 스스로 꺼짐(풀링 친화)
+            _isFading = true;
+
+            OnArrived?.Invoke(); // 꽃/게이지 등
+
+            // 1) 더 이상 방출하지 않도록 정지 (기존 입자들은 수명에 따라 서서히 사라짐)
+            foreach (var ps in _particleSystems)
+                ps.Stop(withChildren: true, stopBehavior: ParticleSystemStopBehavior.StopEmitting);
+
+            // 2) 모든 파티클이 사라질 때까지 대기 후 오브젝트 비활성화
+            StartCoroutine(WaitParticlesAndDisable());
         }
+    }
+    private System.Collections.IEnumerator WaitParticlesAndDisable()
+    {
+        // 자식 포함해서 전부 사라질 때까지 대기
+        bool AnyAlive()
+        {
+            foreach (var ps in _particleSystems)
+                if (ps.IsAlive(true)) return true;
+            return false;
+        }
+
+        while (AnyAlive()) yield return null;
+
+        if (fadeOutGrace > 0f) yield return new WaitForSeconds(fadeOutGrace);
+
+        gameObject.SetActive(false); // 풀링/재사용 용이
     }
 }
