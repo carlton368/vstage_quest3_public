@@ -30,6 +30,14 @@ public class RecordEndEffectComponent : MonoBehaviour
     [Header("도착 시 이벤트(꽃 피우기/게이지 등)")]
     public UnityEvent OnArrived;
 
+    [Header("Flower Spawn")]
+    [SerializeField] private GameObject[] flowerPrefabs; // 여러 개 프리팹 넣기
+    [SerializeField] private int flowerCount = 5;        // 몇 송이?
+    [SerializeField] private float flowerRadius = 1.2f;  // 도착점 주변 반경
+    [SerializeField] private float yOffset = 0.02f;      // 바닥 위 살짝 띄우기
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private bool spawnAsRing = false;
+    
     // 내부 상태
     Vector3 _vel;
     Vector3 _targetPos;
@@ -103,6 +111,9 @@ public class RecordEndEffectComponent : MonoBehaviour
         {
             _moving = false;
             _isFading = true;
+            
+            SpawnFlowersAt(_targetPos);
+            Debug.Log("녹음 이펙트 도착 완료 및 꽃 생성");
 
             OnArrived?.Invoke(); // 꽃/게이지 등
 
@@ -129,5 +140,47 @@ public class RecordEndEffectComponent : MonoBehaviour
         if (fadeOutGrace > 0f) yield return new WaitForSeconds(fadeOutGrace);
 
         gameObject.SetActive(false); // 풀링/재사용 용이
+    }
+    
+    private void SpawnFlowersAt(Vector3 center)
+    {
+        if (flowerPrefabs == null || flowerPrefabs.Length == 0) return;
+
+        for (int i = 0; i < flowerCount; i++)
+        {
+            // 랜덤 위치 계산
+            Vector2 p;
+            if (spawnAsRing)
+            {
+                float angle = (Mathf.PI * 2f) * (i / (float)flowerCount);
+                p = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * flowerRadius;
+            }
+            else
+            {
+                p = Random.insideUnitCircle * flowerRadius;
+            }
+
+            Vector3 pos = center + new Vector3(p.x, 2f, p.y);
+
+            // 랜덤 프리팹 선택
+            GameObject prefab = flowerPrefabs[Random.Range(0, flowerPrefabs.Length)];
+
+            // 바닥 붙이기
+            if (Physics.Raycast(pos, Vector3.down, out var hit, 5f, groundMask, QueryTriggerInteraction.Ignore))
+            {
+                pos = hit.point + Vector3.up * yOffset;
+
+                Quaternion rot = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                rot *= Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+
+                Instantiate(prefab, pos, rot);
+            }
+            else
+            {
+                Instantiate(prefab,
+                    center + new Vector3(p.x, yOffset, p.y),
+                    Quaternion.Euler(0f, Random.Range(0f, 360f), 0f));
+            }
+        }
     }
 }
