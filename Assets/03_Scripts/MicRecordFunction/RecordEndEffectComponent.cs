@@ -44,6 +44,10 @@ public class RecordEndEffectComponent : MonoBehaviour
     float _seed;
     bool _moving;
     private bool _isFading;
+    
+    [SerializeField] private bool snapOnArrive = true;   // 도착 시 살짝 스냅
+    [SerializeField] private float maxFlightTime = 4.0f; // 안전 타임아웃(초)
+    float _flightTimer;
 
     public void SetStageImpactPoint(Transform t) => stageImpactPoint = t; // 필요시 외부에서 세팅
 
@@ -70,58 +74,79 @@ public class RecordEndEffectComponent : MonoBehaviour
 
         _vel = Vector3.zero;
         _moving = true;
+        _flightTimer = 0f;
+
+        Debug.Log($"[RecordEndEffect] START from {transform.position} -> target {_targetPos} (stop={stopDistance}, arriveR={arriveRadius})");
     }
 
     void Update()
     {
         if (!_moving) return;
 
+        // 수평 거리만으로 도착을 판정 (y축 호버 영향 제거)
         Vector3 to = _targetPos - transform.position;
-        float dist = to.magnitude;
-        Vector3 dir = dist > 0.0001f ? to / dist : Vector3.zero;
+        Vector3 toXZ = new Vector3(to.x, 0f, to.z);
+        float distXZ = toXZ.magnitude;
 
-        // Arrive(가까울수록 감속)
-        float speed = dist < arriveRadius ? Mathf.Lerp(0.1f, maxSpeed, dist / arriveRadius) : maxSpeed;
-        Vector3 desired = dir * speed;
+        // 가까워질수록 드리프트/호버 강도 줄이기 (근접 안정화)
+        float arriveT = Mathf.Clamp01(distXZ / arriveRadius); // 멀리=1 -> 가까이=0
+        float driftScale = Mathf.Lerp(0.0f, 1.0f, arriveT);   // 가까울수록 0
+        float hoverScale = Mathf.Lerp(0.2f, 1.0f, arriveT);   // 완전 0은 너무 딱딱 → 최소 0.2 남김
 
-        // 드리프트 + 부유
-        float t = Time.time + _seed;
+        // Arrive(가까울수록 감속) - 수평 방향만 사용
+        Vector3 dirXZ = (distXZ > 0.0001f) ? (toXZ / distXZ) : Vector3.zero;
+        float speed = (distXZ < arriveRadius) ? Mathf.Lerp(0.1f, maxSpeed, distXZ / arriveRadius) : maxSpeed;
+        Vector3 desired = dirXZ * speed;
+
+        // 드리프트 + 부유 (축소 적용)
+        float tt = Time.time + _seed;
         Vector3 wander = new Vector3(
-            Mathf.PerlinNoise(t * wanderFreq, 0f) - 0.5f,
+            Mathf.PerlinNoise(tt * wanderFreq, 0f) - 0.5f,
             0f,
-            Mathf.PerlinNoise(0f, t * wanderFreq) - 0.5f) * 2f;
-        Vector3 hover = Vector3.up * Mathf.Sin(t * hoverFreq) * hoverAmp;
+            Mathf.PerlinNoise(0f, tt * wanderFreq) - 0.5f) * (2f * wanderStrength * driftScale);
 
-        desired += wander * wanderStrength + hover;
+        Vector3 hover = Vector3.up * (Mathf.Sin(tt * hoverFreq) * hoverAmp * hoverScale);
+
+        desired += wander + hover;
 
         // 부드러운 가감속
-        _vel = Vector3.Lerp(_vel, desired, 0.1f);
+        _vel = Vector3.Lerp(_vel, desired, turnSpeed * Time.deltaTime);
         transform.position += _vel * Time.deltaTime;
 
         // 수평 회전
-        Vector3 look = _vel; look.y = 0f;
+        Vector3 look = new Vector3(_vel.x, 0f, _vel.z);
         if (look.sqrMagnitude > 0.0001f)
         {
             Quaternion q = Quaternion.LookRotation(look);
             transform.rotation = Quaternion.Slerp(transform.rotation, q, turnSpeed * Time.deltaTime);
         }
 
-        // 도착 처리
-        if (dist <= stopDistance && _vel.magnitude < 0.05f && !_isFading)
+        // --- 도착 / 타임아웃 판정 ---
+        _flightTimer += Time.deltaTime;
+        bool arrived = distXZ <= stopDistance;          // ✅ 수평 거리로 판정
+        bool timeout = _flightTimer >= maxFlightTime;   // 안전 장치
+
+        if ((arrived || timeout) && !_isFading)
         {
+            // 근접 떨림 마무리: 수평 스냅(선택)
+            if (snapOnArrive)
+            {
+                transform.position = new Vector3(_targetPos.x, transform.position.y, _targetPos.z);
+            }
+
             _moving = false;
             _isFading = true;
-            
+
+            // 꽃 생성 + 로그
             SpawnFlowersAt(_targetPos);
-            Debug.Log("녹음 이펙트 도착 완료 및 꽃 생성");
+            Debug.Log("[RecordEndEffect] Arrived -> spawn flowers");
 
-            OnArrived?.Invoke(); // 꽃/게이지 등
+            OnArrived?.Invoke();
 
-            // 1) 더 이상 방출하지 않도록 정지 (기존 입자들은 수명에 따라 서서히 사라짐)
+            // 파티클 방출 중단 → 남은 수명대로 자연 페이드
             foreach (var ps in _particleSystems)
-                ps.Stop(withChildren: true, stopBehavior: ParticleSystemStopBehavior.StopEmitting);
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
-            // 2) 모든 파티클이 사라질 때까지 대기 후 오브젝트 비활성화
             StartCoroutine(WaitParticlesAndDisable());
         }
     }
