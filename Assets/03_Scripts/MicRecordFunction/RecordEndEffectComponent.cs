@@ -70,15 +70,49 @@ public class RecordEndEffectComponent : MonoBehaviour
             return;
         }
 
-        // 활성화 시점에 타겟 좌표 확정(살짝 랜덤)
-        Vector2 r = Random.insideUnitCircle * impactRandomRadius;
-        _targetPos = stageImpactPoint.position + new Vector3(r.x, 0f, r.y);
-
+        // 🔁 상태 리셋 (2회차 대비)
+        _isFading = false;
         _vel = Vector3.zero;
         _moving = true;
         _flightTimer = 0f;
 
+        // 🎇 파티클 재무장: 클리어 후 플레이
+        if (_particleSystems != null)
+        {
+            foreach (var ps in _particleSystems)
+            {
+                ps.Clear(true);
+                ps.Play(true);
+            }
+        }
+
+        // 활성화 시점 랜덤 착지점
+        Vector2 r = Random.insideUnitCircle * impactRandomRadius;
+        _targetPos = stageImpactPoint.position + new Vector3(r.x, 0f, r.y);
+
         Debug.Log($"[RecordEndEffect] START from {transform.position} -> target {_targetPos} (stop={stopDistance}, arriveR={arriveRadius})");
+    }
+    
+    void OnDisable()
+    {
+        // 움직임/페이드 상태 초기화
+        _moving = false;
+        _isFading = false;
+        _vel = Vector3.zero;
+        _flightTimer = 0f;
+
+        // 코루틴 중지(비활성화 되면 끊기지만 안전하게)
+        StopAllCoroutines();
+
+        // 파티클 클리어 (자식 포함)
+        if (_particleSystems != null)
+        {
+            foreach (var ps in _particleSystems)
+            {
+                ps.Clear(true);   // 남아있던 입자 제거
+                // ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); // 이걸로 대체해도 OK
+            }
+        }
     }
 
     void Update()
