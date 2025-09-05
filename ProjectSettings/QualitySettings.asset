@@ -61,6 +61,7 @@ QualitySettings:
     - VisionOS
     - Android
     - Standalone
+    - iPhone
   - serializedVersion: 4
     name: PC
     pixelLightCount: 2
@@ -167,8 +168,7 @@ QualitySettings:
     terrainBillboardStart: 50
     terrainFadeLength: 5
     terrainMaxTrees: 50
-    excludedTargetPlatforms:
-    - iPhone
+    excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 0
