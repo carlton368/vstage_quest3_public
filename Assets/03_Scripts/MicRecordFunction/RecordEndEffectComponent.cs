@@ -179,7 +179,7 @@ public class RecordEndEffectComponent : MonoBehaviour
     {
         if (flowerPrefabs == null || flowerPrefabs.Length == 0) return;
 
-        // ✅ 무대 바닥 높이 계산
+        // 무대 콜라이더 바닥 높이 -> 이미 stageImpactPoint에 콜라이더 있다고 했으니 이 값이 정확한 바닥
         float stageY = stageImpactPoint != null && stageImpactPoint.TryGetComponent(out Collider col)
             ? col.bounds.min.y + yOffset
             : center.y + yOffset;
@@ -191,16 +191,39 @@ public class RecordEndEffectComponent : MonoBehaviour
                     Mathf.Sin((Mathf.PI * 2f) * (i / (float)flowerCount))) * flowerRadius
                 : Random.insideUnitCircle * flowerRadius;
 
+            // 일단 바닥 높이에 맞춰 스폰
             Vector3 pos = new Vector3(center.x + p.x, stageY, center.z + p.y);
-
             GameObject prefab = flowerPrefabs[Random.Range(0, flowerPrefabs.Length)];
             Quaternion rot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-            Instantiate(prefab, pos, rot);
+            var go = Instantiate(prefab, pos, rot);
 
-            // ✅ 디버그 출력: 각 꽃 스폰 좌표와 stageY 확인
-            Debug.Log($"[FlowerSpawn] Flower {i} at {pos}, stageY={stageY}");
+            // ✅ 스폰 후, 렌더러 바닥을 무대 y에 정확히 맞추기 (피벗이 중앙이어도 OK)
+            SnapRendererBottomToY(go.transform, stageY);
+            Debug.Log($"[FlowerSpawn] Flower {i} at {go.transform.position}, stageY={stageY}");
         }
     }
 
+    // 렌더러(자식 포함)의 bounds.min.y를 기준으로 아래쪽을 무대 y에 스냅
+    private void SnapRendererBottomToY(Transform t, float targetY)
+    {
+        // 여러 렌더러가 있을 수 있으니 모두 검사
+        var renderers = t.GetComponentsInChildren<Renderer>(true);
+        if (renderers == null || renderers.Length == 0) return;
+
+        // 가장 낮은 minY를 바닥으로 간주
+        float minY = float.PositiveInfinity;
+        foreach (var r in renderers)
+        {
+            // 비활성 렌더러는 무시하고 싶으면 아래 줄로 필터링 가능
+            // if (!r.enabled) continue;
+            if (r.bounds.min.y < minY) minY = r.bounds.min.y;
+        }
+
+        if (float.IsInfinity(minY)) return;
+
+        float delta = minY - targetY;        // 현재 바닥과 목표 바닥의 차이
+        if (Mathf.Abs(delta) > 0.0001f)
+            t.position += Vector3.down * delta;  // 그대로 내려(또는 올려) 맞춤
+    }
 }
