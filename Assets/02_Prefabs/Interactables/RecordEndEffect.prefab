@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9024049334220758055}
   - component: {fileID: 5493606655353238399}
   m_Layer: 0
-  m_Name: fire2
+  m_Name: RecordEndEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
