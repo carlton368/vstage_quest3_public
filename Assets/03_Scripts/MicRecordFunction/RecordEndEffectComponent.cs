@@ -34,7 +34,7 @@ public class RecordEndEffectComponent : MonoBehaviour
     [SerializeField] private GameObject[] flowerPrefabs; // 여러 개 프리팹 넣기
     [SerializeField] private int   flowerCount  = 5;     // 몇 송이?
     [SerializeField] private float flowerRadius = 0;  // 도착점 주변 반경
-    [SerializeField] private float yOffset      = 0.02f; // 무대 위 살짝 띄우기
+    [SerializeField] private float yOffset      = 0f; // 무대 위 살짝 띄우기
     [SerializeField] private bool  spawnAsRing  = false; // 원형 균등 배치 여부
     // groundMask는 더 이상 사용하지 않지만, 인스펙터 오류 피하려면 남겨둬도 무방
     [SerializeField] private LayerMask groundMask;
@@ -138,6 +138,11 @@ public class RecordEndEffectComponent : MonoBehaviour
 
             _moving   = false;
             _isFading = true;
+            
+            float stageY = stageImpactPoint != null && stageImpactPoint.TryGetComponent(out Collider col)
+                ? col.bounds.min.y + yOffset
+                : transform.position.y;
+            Debug.Log($"[RecordEndEffect] Arrived at {transform.position}, stageY={stageY}");
 
             // ✅ 이펙트가 사라진 "현재 위치"에서 꽃 스폰
             SpawnFlowersAt(transform.position);
@@ -174,24 +179,28 @@ public class RecordEndEffectComponent : MonoBehaviour
     {
         if (flowerPrefabs == null || flowerPrefabs.Length == 0) return;
 
+        // ✅ 무대 바닥 높이 계산
+        float stageY = stageImpactPoint != null && stageImpactPoint.TryGetComponent(out Collider col)
+            ? col.bounds.min.y + yOffset
+            : center.y + yOffset;
+
         for (int i = 0; i < flowerCount; i++)
         {
-            Vector2 p;
-            if (spawnAsRing)
-            {
-                float angle = (Mathf.PI * 2f) * (i / (float)flowerCount);
-                p = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * flowerRadius;
-            }
-            else
-            {
-                p = Random.insideUnitCircle * flowerRadius;
-            }
+            Vector2 p = spawnAsRing
+                ? new Vector2(Mathf.Cos((Mathf.PI * 2f) * (i / (float)flowerCount)),
+                    Mathf.Sin((Mathf.PI * 2f) * (i / (float)flowerCount))) * flowerRadius
+                : Random.insideUnitCircle * flowerRadius;
 
-            Vector3 pos = center + new Vector3(p.x, yOffset, p.y); // 무대 위 살짝(yOffset)
+            Vector3 pos = new Vector3(center.x + p.x, stageY, center.z + p.y);
+
             GameObject prefab = flowerPrefabs[Random.Range(0, flowerPrefabs.Length)];
             Quaternion rot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
             Instantiate(prefab, pos, rot);
+
+            // ✅ 디버그 출력: 각 꽃 스폰 좌표와 stageY 확인
+            Debug.Log($"[FlowerSpawn] Flower {i} at {pos}, stageY={stageY}");
         }
     }
+
 }
