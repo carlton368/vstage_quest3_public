@@ -1,0 +1,74 @@
+{
+    "name": "ARPose",
+    "maps": [
+        {
+            "name": "ARCamera",
+            "id": "59976f1c-8be1-48a4-b38c-fe4d9f6330d9",
+            "actions": [
+                {
+                    "name": "devicePosition",
+                    "type": "PassThrough",
+                    "id": "c5d966fb-5856-4f78-832e-f24cb843eaba",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "deviceRotation",
+                    "type": "PassThrough",
+                    "id": "a5eca472-4855-4078-907b-0a4240185b2e",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "trackingState",
+                    "type": "PassThrough",
+                    "id": "efeb6549-ae6e-449a-9e86-bff4ef69d8c2",
+                    "expectedControlType": "Integer",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1ecce420-5cf0-4cee-8ac6-18b8777b64e7",
+                    "path": "<HandheldARInputDevice>/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "devicePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b45a85b-9c39-4f08-af59-9af3193bdc4a",
+                    "path": "<HandheldARInputDevice>/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "deviceRotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d3b8572a-af40-41b5-8e98-1d3d846562e3",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "trackingState",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
