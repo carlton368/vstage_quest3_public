@@ -84,16 +84,20 @@ public class RecordEndEffectComponent : MonoBehaviour
     {
         if (!_moving) return;
 
-        // 수평 이동 + 드리프트/부유
-        Vector3 to   = _targetPos - transform.position;
+        // ★ 목표는 매 프레임 꽃의 현재 위치로(정확히 따라가게)
+        Vector3 target = stageImpactPoint ? stageImpactPoint.position : _targetPos;
+
+        // 수평 이동 계산
+        Vector3 to   = target - transform.position;
         Vector3 toXZ = new Vector3(to.x, 0f, to.z);
-        float distXZ = toXZ.magnitude;
+        float   distXZ = toXZ.magnitude;
 
-        // ★ 근접 구간에서 드리프트/호버를 빠르게 줄여 떨림 제거
-        float nearRadius = Mathf.Max(stopDistance * 2f, 0.05f);   // 도착 반경의 2배 정도
-        float arriveT    = Mathf.Clamp01(distXZ / arriveRadius); // 멀수록 1, 가까울수록 0
-        float nearT      = Mathf.Clamp01(distXZ / nearRadius);   // 아주 가까울수록 0
+        // ★ 근접 구간 정의(도착반경의 2배 정도)
+        float nearRadius = Mathf.Max(stopDistance * 2f, 0.05f);
+        float arriveT    = Mathf.Clamp01(distXZ / arriveRadius);
+        float nearT      = Mathf.Clamp01(distXZ / nearRadius);
 
+        // ★ 근접할수록 드리프트/호버 급감 (근처에서 흔들리지 않게)
         float driftScale = (distXZ < nearRadius) ? nearT : Mathf.Lerp(0f, 1f, arriveT);
         float hoverScale = (distXZ < nearRadius) ? nearT * 0.2f : Mathf.Lerp(0.2f, 1f, arriveT);
 
@@ -101,20 +105,33 @@ public class RecordEndEffectComponent : MonoBehaviour
         float   speed = (distXZ < arriveRadius) ? Mathf.Lerp(0.1f, maxSpeed, distXZ / arriveRadius) : maxSpeed;
         Vector3 desired = dirXZ * speed;
 
+        // 드리프트/호버
         float  tt         = Time.time + _seed;
         float  wf         = tt * wanderFreq;
         float  wanderGain = (wanderStrength * driftScale) * 2f;
         float  hoverGain  =  hoverAmp * hoverScale;
         float  nx         = Mathf.PerlinNoise(wf, 0f) * 2f - 1f;
         float  nz         = Mathf.PerlinNoise(0f, wf) * 2f - 1f;
-
         Vector3 wander = new Vector3(nx * wanderGain, 0f, nz * wanderGain);
         Vector3 hover  = new Vector3(0f, Mathf.Sin(tt * hoverFreq) * hoverGain, 0f);
+
         desired += wander + hover;
 
-        _vel = Vector3.Lerp(_vel, desired, turnSpeed * Time.deltaTime);
-        transform.position += _vel * Time.deltaTime;
+        // ★ 근접 구간은 SmoothDamp로 오버슈트 방지
+        if (distXZ < nearRadius)
+        {
+            float smooth = Mathf.Lerp(0.06f, 0.18f, nearT); // 값은 감각적으로 조정
+            transform.position = Vector3.SmoothDamp(transform.position,
+                                                    new Vector3(target.x, transform.position.y, target.z),
+                                                    ref _vel, smooth, maxSpeed);
+        }
+        else
+        {
+            _vel = Vector3.Lerp(_vel, desired, turnSpeed * Time.deltaTime);
+            transform.position += _vel * Time.deltaTime;
+        }
 
+        // 회전
         Vector3 look = new Vector3(_vel.x, 0f, _vel.z);
         if (look.sqrMagnitude > 0.0001f)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), turnSpeed * Time.deltaTime);
@@ -127,20 +144,18 @@ public class RecordEndEffectComponent : MonoBehaviour
         if ((arrived || timeout) && !_isFading)
         {
             // ★ XYZ 전부 정확히 목표로 스냅
-            if (snapOnArrive) transform.position = _targetPos;
+            transform.position = target;
 
-            _moving = false; _isFading = true;
+            _moving = false;
+            _isFading = true;
 
-            // 이번 타겟 꽃 켜기 (머티리얼 Stars Emission Power 트윈)
             if (_currentFlower) _currentFlower.Activate();
-
             OnArrived?.Invoke();
 
             foreach (var ps in _particleSystems)
                 ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
             StartCoroutine(WaitParticlesAndDisable());
-
             AdvanceIndex();
         }
     }
