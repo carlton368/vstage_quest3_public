@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public class RecordEndEffectComponent : MonoBehaviour
 {
@@ -8,7 +9,10 @@ public class RecordEndEffectComponent : MonoBehaviour
     [SerializeField] private bool loopSequence = false;
     [SerializeField] private int startIndex = 0;
 
-    private static int s_nextIndex = -1;
+    // ---- 전역 상태 ----
+    private static int  s_nextIndex = -1;
+    private static int  s_activatedCount = 0;          // 지금까지 켜진 꽃 개수
+    private static bool s_autoSequenceRunning = false;  // 자동 시퀀스 중복 방지
 
     [Header("Move Target (자동 세팅됨)")]
     [SerializeField] private Transform stageImpactPoint;
@@ -31,6 +35,10 @@ public class RecordEndEffectComponent : MonoBehaviour
     [SerializeField] private float fadeOutGrace = 0.1f;
     public UnityEvent OnArrived;
 
+    [Header("Auto sequence after first two")]
+    [SerializeField] private bool  autoLightRestAfterTwo = true; // 두 송이 후 자동 진행
+    [SerializeField] private float autoDelay = 0.25f;            // 각 꽃 사이 간격(초)
+
     // 내부 상태
     Vector3 _vel, _targetPos;
     float _seed;
@@ -46,7 +54,16 @@ public class RecordEndEffectComponent : MonoBehaviour
     {
         _seed = Random.value * 1000f;
         _particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+
         if (s_nextIndex < 0) s_nextIndex = Mathf.Clamp(startIndex, 0, Mathf.Max(0, (flowerOrder?.Length ?? 1) - 1));
+
+        // 처음 진입 시 이미 켜진 것이 있으면 카운트 보정
+        if (s_activatedCount == 0 && flowerOrder != null)
+        {
+            int countOn = 0;
+            foreach (var f in flowerOrder) if (f != null && f.IsOn) countOn++;
+            s_activatedCount = countOn;
+        }
     }
 
     void OnEnable()
@@ -66,9 +83,7 @@ public class RecordEndEffectComponent : MonoBehaviour
 
         _isFading = false; _moving = true; _flightTimer = 0f; _vel = Vector3.zero;
         if (_particleSystems != null)
-        {
             foreach (var ps in _particleSystems) { ps.Clear(true); ps.Play(true); }
-        }
 
         Debug.Log($"[RecordEndEffect] Start -> flower[{s_nextIndex}] {_currentFlower.name}, target={_targetPos}");
     }
@@ -84,7 +99,7 @@ public class RecordEndEffectComponent : MonoBehaviour
     {
         if (!_moving) return;
 
-        // ★ 목표는 매 프레임 꽃의 현재 위치로(정확히 따라가게)
+        // 목표는 매 프레임 꽃의 현재 위치
         Vector3 target = stageImpactPoint ? stageImpactPoint.position : _targetPos;
 
         // 수평 이동 계산
@@ -92,12 +107,10 @@ public class RecordEndEffectComponent : MonoBehaviour
         Vector3 toXZ = new Vector3(to.x, 0f, to.z);
         float   distXZ = toXZ.magnitude;
 
-        // ★ 근접 구간 정의(도착반경의 2배 정도)
         float nearRadius = Mathf.Max(stopDistance * 2f, 0.05f);
         float arriveT    = Mathf.Clamp01(distXZ / arriveRadius);
         float nearT      = Mathf.Clamp01(distXZ / nearRadius);
 
-        // ★ 근접할수록 드리프트/호버 급감 (근처에서 흔들리지 않게)
         float driftScale = (distXZ < nearRadius) ? nearT : Mathf.Lerp(0f, 1f, arriveT);
         float hoverScale = (distXZ < nearRadius) ? nearT * 0.2f : Mathf.Lerp(0.2f, 1f, arriveT);
 
@@ -105,22 +118,22 @@ public class RecordEndEffectComponent : MonoBehaviour
         float   speed = (distXZ < arriveRadius) ? Mathf.Lerp(0.1f, maxSpeed, distXZ / arriveRadius) : maxSpeed;
         Vector3 desired = dirXZ * speed;
 
-        // 드리프트/호버
         float  tt         = Time.time + _seed;
         float  wf         = tt * wanderFreq;
         float  wanderGain = (wanderStrength * driftScale) * 2f;
         float  hoverGain  =  hoverAmp * hoverScale;
         float  nx         = Mathf.PerlinNoise(wf, 0f) * 2f - 1f;
         float  nz         = Mathf.PerlinNoise(0f, wf) * 2f - 1f;
+
         Vector3 wander = new Vector3(nx * wanderGain, 0f, nz * wanderGain);
         Vector3 hover  = new Vector3(0f, Mathf.Sin(tt * hoverFreq) * hoverGain, 0f);
 
         desired += wander + hover;
 
-        // ★ 근접 구간은 SmoothDamp로 오버슈트 방지
+        // 근접 구간은 SmoothDamp로 오버슈트 방지
         if (distXZ < nearRadius)
         {
-            float smooth = Mathf.Lerp(0.06f, 0.18f, nearT); // 값은 감각적으로 조정
+            float smooth = Mathf.Lerp(0.06f, 0.18f, nearT);
             transform.position = Vector3.SmoothDamp(transform.position,
                                                     new Vector3(target.x, transform.position.y, target.z),
                                                     ref _vel, smooth, maxSpeed);
@@ -143,13 +156,18 @@ public class RecordEndEffectComponent : MonoBehaviour
 
         if ((arrived || timeout) && !_isFading)
         {
-            // ★ XYZ 전부 정확히 목표로 스냅
             transform.position = target;
 
             _moving = false;
             _isFading = true;
 
-            if (_currentFlower) _currentFlower.Activate();
+            // 이번 꽃 켜기
+            if (_currentFlower && !_currentFlower.IsOn)
+            {
+                _currentFlower.Activate();
+                s_activatedCount++;
+            }
+
             OnArrived?.Invoke();
 
             foreach (var ps in _particleSystems)
@@ -157,10 +175,26 @@ public class RecordEndEffectComponent : MonoBehaviour
 
             StartCoroutine(WaitParticlesAndDisable());
             AdvanceIndex();
+
+            // 두 송이 켜졌고, 아직 자동 시퀀스가 안 돌고 있다면 전역에서 시작
+            if (autoLightRestAfterTwo && s_activatedCount >= 2 && !s_autoSequenceRunning)
+            {
+                s_autoSequenceRunning = true;
+
+                // 필요한 값 캡처해서 전역 러너로 실행
+                var listCopy = flowerOrder;                 // 필요하면 .ToArray()로 복사
+                float delay  = Mathf.Max(0f, autoDelay);
+
+                GlobalCoroutineRunner.Run(AutoLightRestCoroutineStatic(
+                    listCopy,
+                    delay, 
+                    () => { s_autoSequenceRunning = false; } // 완료 콜백
+                 ));
+            }
         }
     }
 
-    private System.Collections.IEnumerator WaitParticlesAndDisable()
+    private IEnumerator WaitParticlesAndDisable()
     {
         bool AnyAlive()
         {
@@ -172,6 +206,29 @@ public class RecordEndEffectComponent : MonoBehaviour
         while (AnyAlive()) yield return null;
         if (fadeOutGrace > 0f) yield return new WaitForSeconds(fadeOutGrace);
         gameObject.SetActive(false);
+    }
+
+    // ---- 자동 시퀀스(전역에서 실행): 나머지 모두 켜기 ----
+    private static IEnumerator AutoLightRestCoroutineStatic(
+        FlowerTarget[] flowerOrder,
+        float autoDelay,
+        System.Action onComplete
+    )
+    {
+        if (flowerOrder != null)
+        {
+            for (int i = 0; i < flowerOrder.Length; i++)
+            {
+                var f = flowerOrder[i];
+                if (f == null || f.IsOn) continue;
+
+                f.Activate();       // 즉시 OnValue로 점등
+                s_activatedCount++; // 통계용
+                if (autoDelay > 0f)
+                    yield return new WaitForSeconds(autoDelay);
+            }
+        }
+        onComplete?.Invoke();
     }
 
     // ---- 순서 관리 ----
@@ -190,7 +247,7 @@ public class RecordEndEffectComponent : MonoBehaviour
             if (f != null && !f.IsOn) { s_nextIndex = idx; return f; }
         }
 
-        // 전부 켜져 있으면 순서 유지(루프 시 계속 사용)
+        // 전부 켜져 있으면 자동 진행만 필요 → null 반환해도 OK
         return loopSequence ? flowerOrder[s_nextIndex % n] : null;
     }
 
