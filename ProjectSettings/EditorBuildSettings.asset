@@ -11,10 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/fifstage.unity
     guid: 94cc7590a88641241bafa4ae09f36f4f
-  - enabled: 0
+  - enabled: 1
     path: Assets/01_Scenes/MergeFuctions.unity
     guid: 8d84a589b1b6747beaec394d0e8cd217
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/render_setting.unity
     guid: 95610fb0fd8586d48a079748eed6f477
   m_configObjects:
