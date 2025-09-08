@@ -17,9 +17,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/render_setting.unity
     guid: 95610fb0fd8586d48a079748eed6f477
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/Merge0907.unity
     guid: c73a1bc68b071954a8863891faaeae46
+  - enabled: 1
+    path: Assets/01_Scenes/KeywordTextArrange.unity
+    guid: 9e4a1e5471ff9494c90f3c4a61f46eb4
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 0d4fea1ab8e484de4907eb95d0866387, type: 2}
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 4a1a6e5a284c24d65b60d8aa335f1385, type: 2}
