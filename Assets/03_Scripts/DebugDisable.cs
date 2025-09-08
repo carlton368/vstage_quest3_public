@@ -5,7 +5,7 @@ public class DebugDisable : MonoBehaviour
 {
     void Awake()
     {
-#if !UNITY_EDITOR && !DEVELOPMENT_BUILD
+#if !UNITY_EDITOR
         Debug.unityLogger.logEnabled = false;
 #endif
     }
