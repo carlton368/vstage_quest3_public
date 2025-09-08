@@ -93,7 +93,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission2ndMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c947f54184bcf874c9f0fa10804da61a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionBlendMask:
@@ -355,7 +355,7 @@ Material:
     - _Emission2ndBlendMode: 1
     - _Emission2ndFluorescence: 0
     - _Emission2ndGradSpeed: 1
-    - _Emission2ndMainStrength: 0.6
+    - _Emission2ndMainStrength: 0.5
     - _Emission2ndMap_UVMode: 0
     - _Emission2ndParallaxDepth: 0
     - _Emission2ndUseGrad: 0
@@ -668,7 +668,7 @@ Material:
     - _DistanceFadeRimColor: {r: 0, g: 0, b: 0, a: 0}
     - _Emission2ndBlendMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _Emission2ndBlink: {r: 0, g: 0, b: 3.141593, a: 0}
-    - _Emission2ndColor: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
+    - _Emission2ndColor: {r: 0.972549, g: 0.68235296, b: 0.6901961, a: 0.5}
     - _Emission2ndMap_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionBlendMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionBlink: {r: 0, g: 0, b: 3.141593, a: 0}
