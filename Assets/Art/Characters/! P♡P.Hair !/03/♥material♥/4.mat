@@ -371,7 +371,7 @@ Material:
     - _Emission2ndBlendMode: 1
     - _Emission2ndFluorescence: 0.2
     - _Emission2ndGradSpeed: 1
-    - _Emission2ndMainStrength: 0.6
+    - _Emission2ndMainStrength: 1
     - _Emission2ndMap_UVMode: 0
     - _Emission2ndParallaxDepth: 0
     - _Emission2ndUseGrad: 0
@@ -721,7 +721,7 @@ Material:
     - _DistanceFadeRimColor: {r: 0, g: 0, b: 0, a: 0}
     - _Emission2ndBlendMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _Emission2ndBlink: {r: 0, g: 0, b: 3.141593, a: 0}
-    - _Emission2ndColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Emission2ndColor: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
     - _Emission2ndMap_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionBlendMask_ScrollRotate: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionBlink: {r: 0, g: 0, b: 3.1415927, a: 0}

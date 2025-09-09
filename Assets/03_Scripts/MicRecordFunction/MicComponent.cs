@@ -105,7 +105,6 @@ namespace MicRecordFunction
         public void OnGrabGestureReleased()
         {
             StopAndSend();
-            recordEndEffect.SetActive(true);
             _isFollowing = false;
 
             // 왼손의 palm 아래로 다시 이동
@@ -114,9 +113,6 @@ namespace MicRecordFunction
             transform.localRotation = Quaternion.identity;
 
             Debug.Log("[MicComponent] 주먹 제스처 풀림 -> 녹음 종료 + 왼손으로 복귀");
-            
-            //전역 신호 발사 (스포너가 이걸 들고 이펙트 생성)
-            onRecordingFinished?.Invoke();
         }
         
         private IEnumerator BlinkUI()
@@ -158,6 +154,14 @@ namespace MicRecordFunction
             if (!_isRecording) return;
             
             Debug.Log($"[{Time.time:F2}] ⏹ 녹음 종료");
+            
+            // 이펙트를 마이크 현재 위치로 옮긴 뒤 켠다
+            if (recordEndEffect != null)
+            {
+                recordEndEffect.transform.position = transform.position;   // 출발점 = 마이크
+                recordEndEffect.transform.rotation = Quaternion.identity;  // 원하면 동일 회전
+                recordEndEffect.SetActive(true);                           // → 여기서부터 스스로 이동 시작
+            }
 
             int endSample = Microphone.GetPosition(_micDevice);
             Microphone.End(_micDevice);
