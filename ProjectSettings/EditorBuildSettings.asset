@@ -23,12 +23,15 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/KeywordTextArrange.unity
     guid: 9e4a1e5471ff9494c90f3c4a61f46eb4
-  - enabled: 0
+  - enabled: 1
     path: Assets/01_Scenes/DynamicObjectLoadTest.unity
     guid: e5b3c8a77926b6848ae66fa1d70796bd
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/DynamicObjectLoadTest_endingCredit.unity
     guid: 0b4138dd337c70546868cabb639bac08
+  - enabled: 0
+    path: Assets/01_Scenes/EnergyballToFlowerShine.unity
+    guid: 95a304da06dc97241b52d8a5184767af
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 0d4fea1ab8e484de4907eb95d0866387, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: cc32792391e05e34188f244793ef4e5e, type: 2}
