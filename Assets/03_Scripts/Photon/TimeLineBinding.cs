@@ -165,7 +165,7 @@ public class NetworkedTimeLineBinding : NetworkBehaviour
         Debug.Log($"  시작 회전: {playStartRotation.eulerAngles}");
         
         // 12초 후 자동 정지
-        stopCoroutine = StartCoroutine(StopTimelineAfterDelay(12f));
+        stopCoroutine = StartCoroutine(StopTimelineAfterDelay(40f));
     }
     
     // 로컬 Timeline 정지 로직
