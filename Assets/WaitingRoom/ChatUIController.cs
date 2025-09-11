@@ -7,12 +7,12 @@ using System.Collections;
 public class ChatUIController : MonoBehaviour
 {
     [Header("Refs")]
-    public FanApiClient_WebSocket apiClient;  // ★ WS 클라이언트(교체됨)
-    public MicCaptureSenderPTT micSender;     // (선택) 음성 전송
+    public FanApiClient_Http apiClient;      
+    public MicCaptureSenderPTT micSender;    // 음성 전송시 사용
     public ScrollRect scroll;
-    public Transform contentParent;           // ScrollView/Viewport/Content
+    public Transform contentParent;          
     public GameObject bubblePrefab;
-    public HudVisibility hudVisibility;       // (선택) HUD 자동 페이드
+    public HudVisibility hudVisibility;      
 
     [Header("Colors")]
     public Color cheerColor   = new Color(0.90f, 0.98f, 1f);
@@ -23,8 +23,7 @@ public class ChatUIController : MonoBehaviour
     void Awake()
     {
         if (apiClient) apiClient.OnEvent += HandleEvent;
-        // micSender는 이제 서버 event를 따로 방출하지 않음(WS push로 통합)
-        if (micSender) micSender.BindApiClient(apiClient);
+        if (micSender) micSender.BindApiClient(apiClient); // ★ HTTP API 바인딩
     }
 
     void OnDestroy()
