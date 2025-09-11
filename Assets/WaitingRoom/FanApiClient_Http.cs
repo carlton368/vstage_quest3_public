@@ -60,6 +60,8 @@ public class FanApiClient_Http : MonoBehaviour
                         var resp = JsonConvert.DeserializeObject<PollRespDto>(json);
                         if (resp?.Events != null)
                         {
+                            Debug.Log("[FanApi] poll success: " + json);
+                            
                             foreach (var ev in resp.Events)
                                 OnEvent?.Invoke(ev);
                         }
