@@ -13,17 +13,13 @@ public class ChatUIController : MonoBehaviour
     public Transform contentParent;          
     public GameObject bubblePrefab;
     public HudVisibility hudVisibility;      
-
-    [Header("Colors")]
-    public Color cheerColor   = new Color(0.90f, 0.98f, 1f);
-    public Color infoColor    = new Color(0.92f, 1f, 0.92f);
-    public Color requestColor = new Color(1f, 0.97f, 0.90f);
-    public Color trollColor   = new Color(1f, 0.90f, 0.90f);
+    
+    public Color bubbleColor = new Color(0.95f, 0.97f, 1f);
 
     void Awake()
     {
         if (apiClient) apiClient.OnEvent += HandleEvent;
-        if (micSender) micSender.BindApiClient(apiClient); // ★ HTTP API 바인딩
+        if (micSender) micSender.BindApiClient(apiClient); 
     }
 
     void OnDestroy()
@@ -33,15 +29,10 @@ public class ChatUIController : MonoBehaviour
 
     public void HandleEvent(FanEventDto e)
     {
-        string prefix = e.Role switch {
-            "cheer" => "응원", "info" => "정보",
-            "request" => "요청", "troll" => "트롤", _ => "팬"
-        };
-        string message = $"[{prefix}] {e.FanText}";
-        Color bg = e.Role switch {
-            "cheer" => cheerColor, "info" => infoColor,
-            "request" => requestColor, "troll" => trollColor, _ => Color.white
-        };
+        
+        string message = e.FanText;
+        
+        Color bg = bubbleColor;
 
         var go = Instantiate(bubblePrefab, contentParent);
         var item = go.GetComponent<BubbleItem>();
