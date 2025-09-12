@@ -1,0 +1,31 @@
+UI ELECTRIC VFX
+
+本パッケージは、UIおよびTextMeshPro用のスタイライズされた電気VFXシェーダーを提供します。URPおよびBuilt-inパイプラインに対応し、TextMeshPro（ティント、イタリック、取り消し線、下線）と完全互換です。
+
+シェーダー一覧とパラメーター：
+
+1. UIElectricity.shader
+- ColorIntensity：ティント色の強さ
+- Frequency：電波の周波数
+- Width：電流線の幅
+- Border fade：境界フェード
+- Amplitude：変位量
+- Tileable：繰り返し可能にする
+- Variation seed：ノイズパターンの変化
+
+2. ElectricImageUI.shader
+- ColorIntensity：ティントの強度
+- MipLevel：オーラの強度（mipmap必要）
+- Scale：スケール
+- Displacement：歪みの強さ
+- InnerFill：内側の塗りつぶし強度
+- RayThreshold：レイの表示しきい値
+
+3. ElectricText.shader
+- ColorIntensity：ティントの強さ
+- Scale：スケーリング
+- RayThreshold：外側レイのしきい値
+- InnetRayThreshold：内側レイのしきい値
+- InnerFill：中心の塗りつぶし強度
+
+サポートメール：Turishader@gmail.com
