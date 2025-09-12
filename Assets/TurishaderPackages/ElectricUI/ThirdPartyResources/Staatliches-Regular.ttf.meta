@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: b0fceca40ba71b74a97206ba5a6b09cc
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Staatliches
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327495
+  packageName: UI VFX BUNDLE vol 1
+  packageVersion: 1.0
+  assetPath: Assets/TurishaderPackages/ElectricUI/ThirdPartyResources/Staatliches-Regular.ttf
+  uploadId: 775392
