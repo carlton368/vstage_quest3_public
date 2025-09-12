@@ -1,0 +1,31 @@
+UI ELECTRIC VFX
+
+Este paquete incluye shaders de VFX eléctricos estilizados para UI y TextMeshPro. Compatible con URP y Built-in, y con TextMeshPro (tinte, cursiva, tachado, subrayado).
+
+Lista de shaders y parámetros:
+
+1. UIElectricity.shader
+- ColorIntensity: Intensidad del color de tinte
+- Frequency: Frecuencia de ondas eléctricas
+- Width: Ancho del rayo eléctrico
+- Border fade: Desvanecimiento en bordes
+- Amplitude: Cantidad de desplazamiento
+- Tileable: Hace que el efecto se repita sin cortes
+- Variation seed: Controla la variación del ruido
+
+2. ElectricImageUI.shader
+- ColorIntensity: Intensidad del tinte
+- MipLevel: Control del aura (requiere mipmaps)
+- Scale: Escala del efecto
+- Displacement: Potencia de distorsión
+- InnerFill: Intensidad del relleno interior
+- RayThreshold: Umbral de visibilidad del rayo
+
+3. ElectricText.shader
+- ColorIntensity: Intensidad del tinte
+- Scale: Escala del efecto
+- RayThreshold: Umbral del rayo exterior
+- InnetRayThreshold: Umbral del rayo interior
+- InnerFill: Intensidad del relleno interior
+
+Correo de soporte: Turishader@gmail.com
