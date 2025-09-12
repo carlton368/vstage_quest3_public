@@ -13,6 +13,19 @@ public class DarkFilter : MonoBehaviour
 
     public void FadeOutDark()
     {
-        darkPanel.DOFade(0f, 2f); // 다시 밝게
+        darkPanel.DOFade(0f, 5f); // 다시 밝게
+    }
+
+    // 새 메서드: 페이드인 실행 후 지정한 초만큼 기다렸다가 페이드아웃 실행
+    public void FadeInThenFadeOutAfterDelay(float delaySeconds = 10f)
+    {
+        StartCoroutine(FadeInThenOutRoutine(delaySeconds));
+    }
+
+    private System.Collections.IEnumerator FadeInThenOutRoutine(float delaySeconds)
+    {
+        FadeInDark();
+        yield return new WaitForSeconds(delaySeconds);
+        FadeOutDark();
     }
 }
