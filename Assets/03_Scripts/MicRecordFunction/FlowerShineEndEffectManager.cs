@@ -14,8 +14,9 @@ public class FlowerShineEndEffectManager : MonoBehaviour
     [SerializeField] private float delayAfterBigFlower = 0.25f; // (현재 미사용)
     [SerializeField] private float delayAfterPetal    = 0.25f;
 
-    [Header("웨이브 유지 시간")]
-    [SerializeField] private float waveEffectTime = 10.0f;
+    [Header("지속 시간 (효과별로 개별 설정)")]
+    [SerializeField] private float petalEffectTime = 10.0f;   // 꽃잎 이펙트 꺼질 때까지 유지
+    [SerializeField] private float waveEffectTime  = 10.0f;   // 웨이브 이펙트 꺼질 때까지 유지
 
     [Header("디버그")]
     [SerializeField] private bool logDebug = false;
@@ -36,12 +37,16 @@ public class FlowerShineEndEffectManager : MonoBehaviour
     {
         _running = true;
 
-        if (flowerPetalEffect) flowerPetalEffect.SetActive(true);
+        if (flowerPetalEffect)
+        {
+            flowerPetalEffect.SetActive(true);
+            StartCoroutine(DisableAfter(flowerPetalEffect, petalEffectTime)); // 🌸 꽃잎은 petalEffectTime 뒤 꺼짐
+        }
+
         if (delayAfterPetal > 0f) yield return new WaitForSeconds(delayAfterPetal);
 
         if (lightStickWaveEffect)
         {
-            // 웨이브 처음 켤 때만 원래 VFX 상태 저장 후 끄기
             if (!_waveActive && baseLightStickVFX)
             {
                 _baseWasActiveBeforeWave = baseLightStickVFX.activeSelf;
@@ -51,9 +56,8 @@ public class FlowerShineEndEffectManager : MonoBehaviour
             lightStickWaveEffect.SetActive(true);
             _waveActive = true;
 
-            // 이전 끄기 예약이 있으면 취소하고 새로 예약
             if (_waveOffRoutine != null) StopCoroutine(_waveOffRoutine);
-            _waveOffRoutine = StartCoroutine(DisableAfter(lightStickWaveEffect, waveEffectTime));
+            _waveOffRoutine = StartCoroutine(DisableAfter(lightStickWaveEffect, waveEffectTime)); // 🌊 웨이브는 waveEffectTime 뒤 꺼짐
         }
 
         _running = false;
@@ -64,13 +68,15 @@ public class FlowerShineEndEffectManager : MonoBehaviour
         yield return new WaitForSeconds(Mathf.Max(0f, t));
 
         if (go) go.SetActive(false);
-        _waveActive = false;
 
-        // 웨이브 끝 → 원래 VFX를 이전 상태로 복구
-        if (baseLightStickVFX) baseLightStickVFX.SetActive(_baseWasActiveBeforeWave);
-
-        if (logDebug) Debug.Log("[FlowerShineEndEffectManager] Wave OFF → Base VFX restored");
-        _waveOffRoutine = null;
+        // 웨이브 종료 처리
+        if (go == lightStickWaveEffect)
+        {
+            _waveActive = false;
+            if (baseLightStickVFX) baseLightStickVFX.SetActive(_baseWasActiveBeforeWave);
+            if (logDebug) Debug.Log("[FlowerShineEndEffectManager] Wave OFF → Base VFX restored");
+            _waveOffRoutine = null;
+        }
     }
 
     // (선택) 외부에서 즉시 웨이브 중단하고 복구하고 싶을 때 호출
