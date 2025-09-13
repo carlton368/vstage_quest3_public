@@ -10,3 +10,7 @@ public class FanEventDto
     [JsonProperty("ts")]       public double Ts { get; set; }       // epoch seconds
 }
 
+public class PollRespDto
+{
+    [JsonProperty("events")] public FanEventDto[] Events { get; set; }
+}

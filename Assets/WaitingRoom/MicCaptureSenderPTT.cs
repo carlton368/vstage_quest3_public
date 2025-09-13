@@ -15,12 +15,12 @@ public class MicCaptureSenderPTT : MonoBehaviour
     [Header("UI (optional)")]
     public TMP_Text statusLabel;
 
-    private FanApiClient_WebSocket _api; // ★ WebSocket API 참조
+    private FanApiClient_Http _api; 
     AudioClip _clip;
     bool _recording;
     int _clipStartPos;
 
-    public void BindApiClient(FanApiClient_WebSocket api) => _api = api;
+    public void BindApiClient(FanApiClient_Http api) => _api = api;
 
     // UI/Button → OnPointerDown
     public void OnPressDown()
@@ -66,13 +66,13 @@ public class MicCaptureSenderPTT : MonoBehaviour
         // WAV bytes 만들기(메모리로 작성)
         byte[] wavBytes = MakeWavBytes(samples, _clip.channels, sampleRate);
 
-        // WS로 전송
+        // HTTP로 전송
         if (_api == null)
         {
             Log("API 참조 없음");
             return;
         }
-        StartCoroutine(_api.CoSendSingerAudioB64(wavBytes, () => Log("오디오 전송 완료")));
+        StartCoroutine(_api.CoSendSingerAudioWav(wavBytes, _ => Log("오디오 전송 완료")));
     }
 
     void Log(string msg)

@@ -34,7 +34,6 @@ public class RecordEndEffectComponent : MonoBehaviour
 
     [SerializeField] private float fadeOutGrace = 0.1f;
     public UnityEvent OnArrived;
-    public UnityEvent OnAutoSequenceComplete;
 
     [Header("Auto sequence after first two")]
     [SerializeField] private bool  autoLightRestAfterTwo = true; // 두 송이 후 자동 진행
@@ -188,13 +187,8 @@ public class RecordEndEffectComponent : MonoBehaviour
 
                 GlobalCoroutineRunner.Run(AutoLightRestCoroutineStatic(
                     listCopy,
-                    delay,
-                    () =>
-                    {
-                        s_autoSequenceRunning = false;
-                        // ★ 모든 꽃 자동 점등 완료 시 이벤트 발동
-                        try { OnAutoSequenceComplete?.Invoke(); } catch {}
-                    } // 완료 콜백
+                    delay, 
+                    () => { s_autoSequenceRunning = false; } // 완료 콜백
                  ));
             }
         }
