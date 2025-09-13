@@ -37,8 +37,11 @@ public class RecordEndEffectComponent : MonoBehaviour
 
     [Header("Auto sequence after first two")]
     [SerializeField] private bool  autoLightRestAfterTwo = true; // 두 송이 후 자동 진행
-    [SerializeField] private float autoDelay = 0.25f;            // 각 꽃 사이 간격(초)
+    [SerializeField] private float autoDelay = 0.25f; // 각 꽃 사이 간격(초)
 
+    [Header("Events")]
+    public UnityEvent OnAutoSequenceCompleted;
+    
     // 내부 상태
     Vector3 _vel, _targetPos;
     float _seed;
