@@ -164,7 +164,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.DefaultCompany.vstage_vp
+    Android: com.DefaultCompany.vstage_quest3
     Standalone: com.DefaultCompany.vstage-vp
     VisionOS: com.DefaultCompany.vstage-vp
     iPhone: com.DefaultCompany.vstage-vp
