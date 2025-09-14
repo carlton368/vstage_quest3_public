@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 703639584284645529}
   - component: {fileID: 1423145211841270473}
   - component: {fileID: 2347989610437211274}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: VTUBER
   m_TagString: VtuberParent
   m_Icon: {fileID: 0}
