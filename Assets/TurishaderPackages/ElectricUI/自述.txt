@@ -1,0 +1,31 @@
+UI ELECTRIC VFX
+
+该资源包提供适用于UI和TextMeshPro的风格化电流特效着色器。兼容URP和Built-in管线，并全面支持TextMeshPro（颜色、斜体、删除线、下划线）。
+
+着色器列表与参数：
+
+1. UIElectricity.shader
+- ColorIntensity：颜色强度
+- Frequency：电波频率
+- Width：电流线宽度
+- Border fade：边缘淡出
+- Amplitude：扰动幅度
+- Tileable：可平铺效果
+- Variation seed：扰动变化值
+
+2. ElectricImageUI.shader
+- ColorIntensity：颜色强度
+- MipLevel：光环控制（需启用mipmap）
+- Scale：整体缩放
+- Displacement：扭曲强度
+- InnerFill：中心填充强度
+- RayThreshold：光线显示阈值
+
+3. ElectricText.shader
+- ColorIntensity：颜色强度
+- Scale：缩放大小
+- RayThreshold：外部光线阈值
+- InnetRayThreshold：内部光线阈值
+- InnerFill：中心填充强度
+
+技术支持邮箱：Turishader@gmail.com

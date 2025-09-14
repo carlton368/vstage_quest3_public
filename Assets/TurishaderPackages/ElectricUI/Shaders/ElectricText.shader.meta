@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4f9440a72589dad468acb4472222b6b2
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 327495
+  packageName: UI VFX BUNDLE vol 1
+  packageVersion: 1.0
+  assetPath: Assets/TurishaderPackages/ElectricUI/Shaders/ElectricText.shader
+  uploadId: 775392

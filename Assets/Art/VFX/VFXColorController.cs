@@ -5,19 +5,30 @@ using System.Collections;
 public class VFXColorController : MonoBehaviour
 {
     public VisualEffect vfx;
-    public Color colorA = Color.red;
-    public Color colorB = Color.yellow;
+    [ColorUsage(true, true)] public Color colorA = Color.red;
+    [ColorUsage(true, true)] public Color colorB = Color.yellow;
 
     [Range(0.5f, 10f)] public float intensityA = 10f;
 
     [Range(0.5f, 10f)] public float intensityB = 10f;
 
+    [Header("순환할 컬러(10개)")]
+    [ColorUsage(true, true)] public Color[] cycleColors = new Color[10];
+    private int indexA = 0;
+    private int indexB = 5;
+
     void Start()
     {
         if (vfx != null)
         {
-            vfx.SetVector4("Color A", colorA * 8f);
-            vfx.SetVector4("Color B", colorB * 8f);
+            // cycleColors가 설정되어 있으면 그 값을 우선 사용
+            if (cycleColors != null && cycleColors.Length > 0)
+            {
+                colorA = cycleColors.Length > 0 ? cycleColors[indexA % cycleColors.Length] : colorA;
+                colorB = cycleColors.Length > 1 ? cycleColors[indexB % cycleColors.Length] : colorB;
+            }
+            vfx.SetVector4("Color A", colorA * intensityA);
+            vfx.SetVector4("Color B", colorB * intensityB);
         }
 
         StartCoroutine(ChangeColorsRoutine());
@@ -29,13 +40,21 @@ public class VFXColorController : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
-            colorA = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f);
-            vfx.SetVector4("Color A", colorA * 8f);
+            if (vfx != null && cycleColors != null && cycleColors.Length > 0)
+            {
+                colorA = cycleColors[indexA % cycleColors.Length];
+                vfx.SetVector4("Color A", colorA * intensityA);
+                indexA = (indexA + 1) % cycleColors.Length;
+            }
 
             yield return new WaitForSeconds(1f);
 
-            colorB = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f);
-            vfx.SetVector4("Color B", colorB * 8f);
+            if (vfx != null && cycleColors != null && cycleColors.Length > 0)
+            {
+                colorB = cycleColors[indexB % cycleColors.Length];
+                vfx.SetVector4("Color B", colorB * intensityB);
+                indexB = (indexB + 1) % cycleColors.Length;
+            }
         }
     }
 }

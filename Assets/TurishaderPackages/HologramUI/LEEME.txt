@@ -1,0 +1,69 @@
+
+UI Hologram VFX - Guía de Parámetros del Material
+=================================================
+
+Si tienes algún problema o duda, no dudes en contactar:
+Turishader@gmail.com
+
+Color
+-----
+- MultiplicadorDeColor
+  Controla el brillo/intensidad general del shader. Valores más altos producirán un brillo más vibrante.
+
+Patrón
+------
+- TamañoDelPatrón
+  Ajusta el tamaño de los puntos o píxeles del patrón. Afecta lo fino o grueso que se ve el patrón holográfico.
+
+- Patrón
+  Menú desplegable para seleccionar el estilo del patrón. Opciones incluyen:
+    * Puntos: Círculos
+    * Píxeles: Cuadrados
+    * (Estilos adicionales si están disponibles)
+
+Aura por Mipmap (solo en HologramUI.shader)
+-------------------------------------------
+*Requiere texturas con mipmap activado*
+
+- NivelMip
+  Define qué nivel mipmap usar para la muestra del aura. Niveles más altos dan bordes más suaves y borrosos.
+
+- IntensidadNivelMip
+  Controla cuán fuerte aparece el efecto Fresnel basado en mipmap. Cero lo desactiva; valores altos lo amplifican.
+
+Glitch
+------
+- CantidadDeGlitch
+  Cantidad de glitch espacial y temporal aplicada al holograma. Útil para parpadeo sutil o distorsión agresiva.
+
+- OpacidadMínimaGlitch
+  Define la opacidad mínima durante el glitch. Valores bajos hacen el efecto más transparente.
+
+- RepeticiónGlitch
+  Factor de tiling de la textura de glitch. Afecta qué tan densa y detallada aparece la distorsión.
+
+- CantidadDistorsión
+  Intensidad de la distorsión UV en espacio de pantalla. Valores altos generan más ondulación.
+
+Solo Shader de Texto - Personalización de texto
+-----------------------------------------------
+- DilataciónTexto
+  Expande el grosor de la geometría del texto. Útil para dar énfasis o efecto de brillo.
+
+- ExtensiónDilataciónTexto
+  Extiende suavemente la dilatación para un efecto de resplandor. Úsalo junto con DilataciónTexto.
+
+Configuración de Renderizado
+----------------------------
+- ColaDeRenderizado
+  Controla cuándo se renderiza el material en relación con otros. Valor por defecto: 3000 (objetos transparentes).
+  Recomendado: mantener en "Desde Shader" salvo problemas de composición.
+
+- Instanciación GPU
+  Permite que Unity agrupe múltiples instancias del material para mejorar el rendimiento.
+
+- Iluminación Global en Ambas Caras
+  Ilumina ambos lados del elemento UI, útil si usas probes o GI.
+
+- Iluminación Global
+  Especifica cómo este material participa en la iluminación global. Usualmente se deja en Ninguna para UI.
