@@ -104,6 +104,12 @@ public class NetworkedTimeLineBinding : NetworkBehaviour
             if (vrIK != null)
             {
                 Debug.Log($"VRIK 찾음: {vrIK.gameObject.name}");
+                // 클라이언트에서는 항상 VRIK를 꺼둔다
+                if (!HasStateAuthority)
+                {
+                    vrIK.enabled = false;
+                    Debug.Log("Client: VRIK를 비활성화 상태로 유지합니다.");
+                }
             }
         }
     }
@@ -181,8 +187,18 @@ public class NetworkedTimeLineBinding : NetworkBehaviour
         director.time = 0;
         director.enabled = false;
         
+        // Host에서만 VRIK를 다시 켭니다. (클라이언트는 계속 꺼진 상태 유지)
         if (vrIK != null)
-            vrIK.enabled = true;
+        {
+            if (HasStateAuthority)
+            {
+                vrIK.enabled = true;
+            }
+            else
+            {
+                vrIK.enabled = false;
+            }
+        }
         
         Debug.Log($"■ [{(HasStateAuthority ? "HOST" : "CLIENT")}] Timeline 정지");
     }

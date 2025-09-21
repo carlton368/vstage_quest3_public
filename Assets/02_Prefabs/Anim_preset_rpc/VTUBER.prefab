@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 703639584284645529}
   - component: {fileID: 1423145211841270473}
   - component: {fileID: 2347989610437211274}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: VTUBER
   m_TagString: VtuberParent
   m_Icon: {fileID: 0}
@@ -345,8 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1b2c3d4e5f6789012345678901234ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vrik: {fileID: 0}
-  animator: {fileID: 0}
+  vrik: {fileID: 703639584284645529}
+  animator: {fileID: 727822756247324274}
   facialTracking: {fileID: 0}
   _BoneRotations: []
   _RootPosition: {x: 0, y: 0, z: 0}
