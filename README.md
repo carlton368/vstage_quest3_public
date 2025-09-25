@@ -41,7 +41,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 - **Quest OS**: v57+ (Meta Quest 3 최신 펌웨어)
 - **개발자 모드**: APK 설치 시 필요
 
-### Host (공연자용 - 별도 프로젝트)
+### Host (공연자용 - https://github.com/carlton368/vstage_win_public)
 #### 하드웨어
 - **PC**: Windows 10/11 (64-bit)
 - **VR 트래커**: HTC Vive Tracker 3.0 (3~7개)
