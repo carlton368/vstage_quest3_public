@@ -50,10 +50,6 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 - **RAM**: 32GB 이상 권장 (VR 트래킹 처리용)
 - **GPU**: RTX 3070 이상 권장 (실시간 렌더링용)
 
-#### 소프트웨어
-- **Unity**: 6000.1.2f1 이상
-- **SteamVR**: 최신 버전
-- **OpenVR**: SteamVR 포함
 
 ### 개발 환경 (Unity Editor)
 #### 하드웨어
@@ -63,7 +59,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 - **저장공간**: 10GB 이상 여유 공간
 
 #### 소프트웨어
-- **Unity**: 2023.3.0f1 이상 (Quest 3 빌드용)
+- **Unity**: 6000.1.2f1 이상 (Quest 3 빌드용)
 - **Unity XR Plugin Management**: 4.4.1+
 - **Meta XR SDK**: 68.0.0+
 - **Android Build Support**: Unity 모듈
