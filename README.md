@@ -158,7 +158,7 @@ vstage_quest3_public/
 3. **로비에서 대기** 후 호스트 연결
 4. **제스처로 상호작용**:
    - ✋ 손을 올리고 말하기 → 음성 녹음
-   - 👏 박수 제스처 → 응원 효과
+   - 👏 응원봉 흔들기 제스처 → 응원봉 발광 효과
    - 🤏 라이트스틱 잡기 → 응원봉 조작
 
 ### 호스트 모드 (VR 트래커 필요)
@@ -267,14 +267,6 @@ public class NetworkedObject : NetworkBehaviour
 - WebSocket 서버 연결 상태 확인
 ```
 
-## 📈 성능 최적화
-
-### 권장 설정
-- **Render Pipeline**: URP (Universal Render Pipeline)
-- **Graphics API**: Vulkan (Android)
-- **Multiview**: Enable
-- **Fixed Foveated Rendering**: Level 2-3
-- **Texture Quality**: Medium (메모리 절약)
 
 ### 프로파일링
 ```csharp
