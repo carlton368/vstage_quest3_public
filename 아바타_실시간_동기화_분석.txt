@@ -1,0 +1,153 @@
+========================================
+VStage Quest3 아바타 실시간 동기화 분석
+========================================
+
+1. 동기화 아키텍처
+==================
+
+Host-Client 모델 사용:
+- Host: VR 플레이어가 Final IK(VRIK)로 아바타 제어 후 본 데이터 송신
+- Client: 관전자들이 Host의 본 데이터를 받아 동일한 포즈 재현
+
+네트워크 프레임워크: Photon Fusion 사용
+
+2. 네트워크 동기화 변수
+======================
+
+[Networked, Capacity(100)] NetworkArray<Quaternion> BoneRotations
+- 최대 100개 본의 회전값 저장 배열
+- 실제 사용: 16-20개 본 (휴머노이드 표준)
+
+[Networked] Vector3 RootPosition
+- 아바타 루트 본의 월드 위치
+
+[Networked] Quaternion RootRotation
+- 아바타 루트 본의 월드 회전
+
+[Networked] bool IsDataInitialized
+- 데이터 초기화 완료 플래그
+
+페이셜 트래킹 (6채널):
+[Networked] float FacialJaw, FacialSmile, FacialWide, FacialO, FacialSad, FacialTongue
+
+3. Host 측 동작 (송신)
+====================
+
+VR 트래커 설정:
+- Head Target (헤드셋)
+- Left/Right Hand Target (양손 컨트롤러)
+- Waist Target (허리 트래커, 옵션)
+- Left/Right Foot Target (양발 트래커, 옵션)
+
+VRIK 처리 과정:
+1. VR 트래커 6개 자동 검색 및 VRIK solver 연결
+2. VRIK가 VR 트래커 데이터로 전신 IK 계산
+3. 계산된 모든 본의 회전값 추출
+4. FixedUpdateNetwork()에서 네트워크로 송신 (60fps)
+
+송신 데이터:
+- 루트 위치/회전
+- 16-20개 본의 회전값 (Quaternion)
+- 페이셜 트래킹 6채널 (RPC 방식)
+
+4. Client 측 동작 (수신)
+======================
+
+초기화:
+- VRIK 컴포넌트 비활성화 (IK 계산 생략)
+- Animator 컴포넌트 비활성화 (충돌 방지)
+- 본 참조 캐시
+
+동기화 과정:
+1. Update()에서 매 프레임 네트워크 데이터 확인
+2. 유효성 검증 (NaN, Infinity 체크)
+3. Transform.rotation에 직접 적용 (IK 없이)
+
+boneReferences[i].rotation = BoneRotations[i];
+
+5. 전송되는 본 구조 (최대 20개)
+==============================
+
+기본 몸체 본 (6개):
+1. root - 전체 아바타 기준점
+2. pelvis - 골반 (하체 기준점)
+3. spine - 척추
+4. chest - 가슴 (상체)
+5. neck - 목
+6. head - 머리
+
+팔 본 (8개):
+7. leftShoulder - 왼쪽 어깨
+8. leftUpperArm - 왼쪽 상완
+9. leftForearm - 왼쪽 전완
+10. leftHand - 왼손
+11. rightShoulder - 오른쪽 어깨
+12. rightUpperArm - 오른쪽 상완
+13. rightForearm - 오른쪽 전완
+14. rightHand - 오른손
+
+다리 본 (6개):
+15. leftThigh - 왼쪽 허벅지
+16. leftCalf - 왼쪽 종아리
+17. leftFoot - 왼발
+18. rightThigh - 오른쪽 허벅지
+19. rightCalf - 오른쪽 종아리
+20. rightFoot - 오른발
+
+6. 페이셜 트래킹 동기화 (6채널)
+=============================
+
+Host에서 SimpleShinanoFacialTracking으로 감정 데이터 수집:
+- Jaw (턱 움직임) - 입 벌리기, 턱 내리기
+- Smile (미소) - 입꼬리 올리기, 웃는 표정
+- Wide (입 벌리기) - 놀란 표정, 크게 벌리기
+- O (입술 오므리기) - 'O' 모양 입
+- Sad (슬픈 표정) - 입꼬리 내리기, 우울한 표정
+- Tongue (혀 내밀기) - 장난스러운 표정
+
+전송 방식: RPC + 네트워크 변수 병행
+- RPC로 즉시 전송하여 지연 최소화
+- 네트워크 변수로 상태 보존
+
+7. 성능 특징
+===========
+
+데이터량:
+- 본당 16 bytes (Quaternion = float × 4)
+- 총 데이터: ~320 bytes (20개 본 × 16 bytes)
+- 페이셜: 24 bytes (6개 × float 4 bytes)
+
+전송 주기:
+- Host 송신: FixedUpdateNetwork() - 서버 틱 레이트 (60fps)
+- Client 수신: Update() - 매 프레임 (부드러운 동기화)
+
+성능 최적화:
+- Client는 무거운 IK 연산 생략
+- 직접 Transform 조작으로 오버헤드 최소화
+- 유효성 검증으로 이상 데이터 필터링
+
+8. 핵심 코드 위치
+===============
+
+파일: Assets/03_Scripts/Photon/VRIKNetworkPlayer.cs
+
+주요 메서드:
+- UpdateHostData() : Host 본 데이터 송신 (669행)
+- UpdateClientData() : Client 본 데이터 수신 (817행)
+- CacheBoneReferences() : 본 참조 캐시 (460행)
+- UpdateFacialData() : 페이셜 데이터 송신 (770행)
+
+9. 동기화 흐름 요약
+=================
+
+Host:
+VR 트래커 → VRIK 계산 → 본 회전 추출 → 네트워크 송신
+
+Client:
+네트워크 수신 → 유효성 검증 → Transform 직접 적용
+
+결과: Host의 VR 포즈가 실시간으로 모든 Client에 정확히 복제
+
+========================================
+분석 완료 - VStage Quest3 아바타 동기화
+========================================
