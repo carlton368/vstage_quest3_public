@@ -2,7 +2,7 @@
 
 **차세대 AI 기반 실시간 버츄얼 콘서트 플랫폼 - Meta Quest3 관객용**
 
-[![Unity](https://img.shields.io/badge/Unity-6000.1.2f1-000000?style=for-the-badge&logo=unity)
+[![Unity](https://img.shields.io/badge/Unity-6000.1.2f1-000000?style=for-the-badge&logo=unity)]
 [![Meta Quest 3](https://img.shields.io/badge/Meta_Quest_3-Compatible-blue.svg)](https://www.meta.com/quest/quest-3/)
 [![Photon Fusion](https://img.shields.io/badge/Photon_Fusion-Networking-green.svg)](https://www.photonengine.com/fusion)
 [![XR Hands](https://img.shields.io/badge/Unity_XR_Hands-Tracking-orange.svg)](https://docs.unity3d.com/Packages/com.unity.xr.hands@1.5/manual/index.html)
