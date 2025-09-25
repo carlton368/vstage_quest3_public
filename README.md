@@ -44,7 +44,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 ### Host (공연자용 - https://github.com/carlton368/vstage_win_public)
 #### 하드웨어
 - **PC**: Windows 11
-- **VR 트래커**: HTC Vive Tracker 3.0 (3~7개)
+- **VR 트래커**: HTC Vive Tracker 3.0 (3개)
 - **베이스 스테이션**: SteamVR 트래킹용
 - **CPU**: Intel i7-9700K 또는 AMD Ryzen 7 3700X 이상
 - **RAM**: 32GB 이상 권장 (VR 트래킹 처리용)
@@ -103,7 +103,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 │              [Photon Fusion]                                    │
 │                     ↓                                           │
 │  📱 Client Application (Meta Quest 3) - 이 프로젝트              │
-│  ├── Unity 2023.3.0f1                                          │
+│  ├── Unity 6000.1.2f1                                       │
 │  ├── Unity XR Hands 트래킹                                      │
 │  ├── VR 인터랙션 (라이트스틱, 제스처)                             │
 │  ├── 실시간 아바타 동기화                                        │
@@ -125,7 +125,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 | 구분 | Host (공연자용) | Client (관객용) |
 |------|----------------|----------------|
 | **플랫폼** | Windows + VR Trackers | Meta Quest 3 |
-| **Unity 버전** | Unity 6000.1.2f1 | Unity 2023.3.0f1 |
+| **Unity 버전** | Unity 6000.1.2f1 
 | **주요 역할** | VR 공연 제어 및 송출 | VR 콘서트 관람 및 참여 |
 | **트래킹** | HTC Vive/SteamVR (100+본) | Unity XR Hands |
 | **페이셜 트래킹** | 6채널 실시간 캡처 | 네트워크 동기화 수신 |
@@ -159,7 +159,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 
 #### Host 애플리케이션 설정 (공연자)
 1. **Host 프로젝트 설치**: [V-Stage Win Public](https://github.com/carlton368/vstage_win_public) 리포지토리에서 Host 애플리케이션을 먼저 설정
-2. **VR 트래커 준비**: HTC Vive Tracker 3.0과 베이스 스테이션 설정
+2. **VR 트래커 준비**: HTC Vive Tracker 3.0 3개와 베이스 스테이션 설정
 3. **SteamVR 구성**: 트래커 페어링 및 캘리브레이션 완료
 
 ### 🎯 Client 애플리케이션 설정 (관객용)
