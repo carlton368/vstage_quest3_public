@@ -43,7 +43,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 
 ### Host (공연자용 - https://github.com/carlton368/vstage_win_public)
 #### 하드웨어
-- **PC**: Windows 10/11 (64-bit)
+- **PC**: Windows 11
 - **VR 트래커**: HTC Vive Tracker 3.0 (3~7개)
 - **베이스 스테이션**: SteamVR 트래킹용
 - **CPU**: Intel i7-9700K 또는 AMD Ryzen 7 3700X 이상
@@ -53,7 +53,7 @@ V-Stage Quest3는 메타버스 환경에서 실시간 VR 콘서트를 경험할 
 
 ### 개발 환경 (Unity Editor)
 #### 하드웨어
-- **PC**: Windows 10/11 또는 macOS
+- **PC**: Windows 11
 - **RAM**: 16GB 이상 권장
 - **GPU**: GTX 1660 이상 권장
 - **저장공간**: 10GB 이상 여유 공간
@@ -888,7 +888,7 @@ targetFPS.SetTargetFrameRate(72); // Quest 3 권장 프레임레이트
 **V-Stage 프로젝트 정보**
 - **Client (이 프로젝트)**: V-Stage Quest3 Public
   - 버전: 1.0.0
-  - Unity 버전: 2023.3.0f1+
+  - Unity 버전: 6000.1.2f1+
   - 플랫폼: Meta Quest 3
   - 용도: VR 콘서트 관객용 애플리케이션
 
@@ -903,8 +903,7 @@ targetFPS.SetTargetFrameRate(72); // Quest 3 권장 프레임레이트
 - **Host Issues**: [V-Stage Win Public Issues](https://github.com/carlton368/vstage_win_public/issues)
 - **통합 문서**: 각 프로젝트의 README 및 코드 내 주석 참조
 - **Unity 호환성**:
-  - Client: Unity 2023.3 LTS 권장
-  - Host: Unity 6000.1.2f1+ 권장
+  - Unity 6000.1.2f1+ 권장
 
 **시스템 요구사항 요약**
 - **최소 사용자**: Host 1명 + Client 1명
